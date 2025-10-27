@@ -1,0 +1,2947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMAI - Smart Medical AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --card-bg: #ffffff;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            --gradient-secondary: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 80px; /* Space for bottom nav */
+        }
+
+        /* App Container */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--light);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Bottom Navigation Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: var(--gray);
+            min-width: 70px;
+            position: relative;
+        }
+
+        .nav-item.active {
+            background: var(--gradient-primary);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .nav-item:hover:not(.active) {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+            transition: all 0.3s;
+        }
+
+        .nav-item.active .nav-icon {
+            transform: scale(1.2);
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        /* Header */
+        .app-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2.2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .auth-btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .login-btn {
+            background: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .signup-btn {
+            background: white;
+            color: var(--primary);
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .profile-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .profile-name {
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .app-content {
+            flex: 1;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Page Sections */
+        .page {
+            display: none;
+            flex: 1;
+            padding: 0;
+            overflow-y: auto;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        /* Home Page */
+        .hero-section {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="%23ffffff" opacity="0.05"><polygon points="0,0 1000,50 1000,100 0,100"></polygon></svg>');
+            background-size: cover;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .quotation {
+            font-size: 1.5rem;
+            font-style: italic;
+            margin-bottom: 25px;
+            opacity: 0.9;
+            animation: slideUp 0.8s ease-out 0.2s both;
+            border-left: 4px solid rgba(255, 255, 255, 0.5);
+            padding-left: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            animation: slideUp 0.8s ease-out 0.4s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            animation: slideUp 0.8s ease-out 0.6s both;
+        }
+
+        .hero-btn {
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .primary-btn {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .secondary-btn {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .location-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Location Status */
+        .location-status {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            animation: slideUp 0.8s ease-out 0.8s both;
+        }
+
+        /* Slider Section */
+        .slider-section {
+            padding: 60px 40px;
+            background: white;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--dark);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .slider-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slide {
+            min-width: 100%;
+            position: relative;
+        }
+
+        .slide-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            font-size: 1.2rem;
+        }
+
+        .slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            padding: 30px;
+        }
+
+        .slide-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .slide-description {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+        }
+
+        .slider-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+
+        .slider-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: var(--primary);
+            transform: scale(1.2);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 80px 40px;
+            background: #f8fafc;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient-primary);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2rem;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .feature-description {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* AI Excellence Section */
+        .ai-section {
+            padding: 80px 40px;
+            background: white;
+        }
+
+        .ai-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .ai-text {
+            padding-right: 20px;
+        }
+
+        .ai-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--dark);
+            line-height: 1.2;
+        }
+
+        .ai-description {
+            font-size: 1.1rem;
+            color: var(--gray);
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .ai-features {
+            list-style: none;
+        }
+
+        .ai-feature {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .ai-feature i {
+            color: var(--success);
+            font-size: 1.2rem;
+        }
+
+        .ai-visual {
+            position: relative;
+            height: 400px;
+            background: var(--gradient-secondary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .ai-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="%23ffffff" opacity="0.1"><circle cx="100" cy="100" r="80"></circle></svg>');
+            background-size: cover;
+        }
+
+        .brain-icon {
+            font-size: 8rem;
+            color: white;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .pulse-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            animation: pulse-ring 2s ease-out infinite;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 60px 40px;
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Tool Page */
+        .tool-section {
+            padding: 40px;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+
+        .tool-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .location-card {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .location-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .location-info p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8fafc;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover, .upload-area.dragover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .upload-text h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .upload-text p {
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .upload-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .camera-button {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .camera-button:hover {
+            background: #0da271;
+            transform: translateY(-2px);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .analysis-type {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .analysis-type-btn {
+            padding: 12px 20px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            color: var(--gray);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .analysis-type-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .preview-container {
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        #imagePreview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .analyze-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
+        }
+
+        .analyze-btn:hover:not(:disabled) {
+            background: #0da271;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px -1px rgba(16, 185, 129, 0.4);
+        }
+
+        .analyze-btn:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result-section {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .severity-indicator {
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .low-severity {
+            background: rgba(16, 185, 129, 0.1);
+            color: #065f46;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .medium-severity {
+            background: rgba(245, 158, 11, 0.1);
+            color: #92400e;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .high-severity {
+            background: rgba(239, 68, 68, 0.1);
+            color: #991b1b;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .critical-severity {
+            background: rgba(239, 68, 68, 0.2);
+            color: #7f1d1d;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .confidence-meter {
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .confidence-level {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--warning), var(--danger));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .analysis-details {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 16px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .recommendations {
+            background: #f0f9ff;
+            padding: 25px;
+            border-radius: 16px;
+            margin-top: 20px;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .emergency-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3);
+        }
+
+        .emergency-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px -1px rgba(239, 68, 68, 0.4);
+        }
+
+        .appointment-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .appointment-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Camera Modal */
+        .camera-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .camera-modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .camera-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            position: relative;
+            text-align: center;
+        }
+
+        .camera-preview {
+            width: 100%;
+            height: 300px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #cameraVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #cameraCanvas {
+            display: none;
+        }
+
+        .camera-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .capture-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .cancel-camera-btn {
+            background: transparent;
+            color: var(--gray);
+            border: 2px solid #e2e8f0;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        /* Emergency Alert Modal */
+        .emergency-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(239, 68, 68, 0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .emergency-modal.active {
+            display: flex;
+            animation: emergencyPulse 0.5s ease-out;
+        }
+
+        .emergency-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            position: relative;
+            text-align: center;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .emergency-icon {
+            font-size: 4rem;
+            color: var(--danger);
+            margin-bottom: 20px;
+            animation: pulse 1s infinite;
+        }
+
+        .emergency-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--danger);
+        }
+
+        .emergency-message {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .emergency-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .emergency-call-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .emergency-cancel-btn {
+            background: transparent;
+            color: var(--gray);
+            border: 2px solid #e2e8f0;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        /* Hospitals Page */
+        .hospitals-section {
+            padding: 40px;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+
+        .hospitals-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hospitals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .hospital-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s;
+        }
+
+        .hospital-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .hospital-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 20px;
+        }
+
+        .hospital-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .hospital-address {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .hospital-body {
+            padding: 20px;
+        }
+
+        .hospital-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .hospital-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .hospital-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+        }
+
+        .call-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .hospital-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Login Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--dark);
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-align: center;
+            color: var(--dark);
+        }
+
+        .modal-subtitle {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--gray);
+        }
+
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .app-footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 40px 30px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes pulse-ring {
+            0% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% { 
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes emergencyPulse {
+            0% { 
+                background: rgba(239, 68, 68, 0.7);
+            }
+            50% { 
+                background: rgba(239, 68, 68, 0.9);
+            }
+            100% { 
+                background: rgba(239, 68, 68, 0.7);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .ai-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .ai-text {
+                padding-right: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-header {
+                padding: 15px 20px;
+            }
+            
+            .logo-text {
+                font-size: 1.5rem;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .quotation {
+                font-size: 1.2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .slider-section, .features-section, .ai-section, .stats-section {
+                padding: 40px 20px;
+            }
+            
+            .tool-section, .hospitals-section {
+                padding: 20px;
+            }
+            
+            .analysis-type {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .hospital-actions {
+                flex-direction: column;
+            }
+            
+            .emergency-actions {
+                flex-direction: column;
+            }
+            
+            .bottom-nav {
+                padding: 8px 0;
+            }
+            
+            .nav-item {
+                min-width: 60px;
+                padding: 6px 10px;
+            }
+            
+            .nav-label {
+                font-size: 0.65rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .quotation {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .ai-title {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .hospitals-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .bottom-nav {
+                padding: 6px 0;
+            }
+            
+            .nav-item {
+                min-width: 50px;
+                padding: 5px 8px;
+            }
+            
+            .nav-icon {
+                font-size: 1.1rem;
+            }
+            
+            .nav-label {
+                font-size: 0.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-stethoscope"></i>
+                </div>
+                <div>
+                    <div class="logo-text">SMAI</div>
+                    <div class="logo-subtitle">Smart Medical AI</div>
+                </div>
+            </div>
+            <div class="user-actions">
+                <div class="auth-buttons" id="authButtons">
+                    <button class="auth-btn login-btn" id="loginBtn">Log In</button>
+                    <button class="auth-btn signup-btn" id="signupBtn">Sign Up</button>
+                </div>
+                <div class="user-profile" id="userProfile" style="display: none;">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="profile-name">Dr. John Smith</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-content">
+            <!-- Home Page -->
+            <section id="home-page" class="page active">
+                <!-- Hero Section -->
+                <div class="hero-section">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Revolutionizing Medical Diagnosis with AI</h1>
+                        <div class="quotation">
+                            "YOUR PHOTO OUR AI - GET AN APPOINTMENT TO THE NEAREST HOSPITAL WHEN EMERGENCY"
+                        </div>
+                        <p class="hero-subtitle">Advanced AI-powered medical imaging analysis for accurate, fast, and accessible healthcare</p>
+                        <div class="hero-buttons">
+                            <button class="hero-btn primary-btn" onclick="switchPage('tool-page')">
+                                <i class="fas fa-camera"></i> Start Analysis
+                            </button>
+                            <button class="hero-btn secondary-btn" onclick="switchPage('hospitals-page')">
+                                <i class="fas fa-hospital"></i> Find Hospitals
+                            </button>
+                            <button class="hero-btn location-btn" onclick="getUserLocation()">
+                                <i class="fas fa-location-arrow"></i> Detect Location
+                            </button>
+                        </div>
+                        <div class="location-status" id="homeLocationStatus">
+                            <i class="fas fa-info-circle"></i> Location services will help find nearby hospitals
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slider Section -->
+                <div class="slider-section">
+                    <h2 class="section-title">Our Medical Partners</h2>
+                    <div class="slider-container">
+                        <div class="slider" id="slider">
+                            <div class="slide">
+                                <div class="slide-image">
+                                    <i class="fas fa-hospital" style="font-size: 4rem; color: #94a3b8;"></i>
+                                    <div style="margin-top: 15px; color: #64748b;">SPANDAN Medical Center Image</div>
+                                </div>
+                                <div class="slide-content">
+                                    <h3 class="slide-title">SPANDAN Medical Center</h3>
+                                    <p class="slide-description">The Largest Medical Care Institution of Eastern India</p>
+                                </div>
+                            </div>
+                            <div class="slide">
+                                <div class="slide-image">
+                                    <i class="fas fa-microscope" style="font-size: 4rem; color: #94a3b8;"></i>
+                                    <div style="margin-top: 15px; color: #64748b;">Advanced Diagnostics Image</div>
+                                </div>
+                                <div class="slide-content">
+                                    <h3 class="slide-title">Advanced Diagnostics</h3>
+                                    <p class="slide-description">State-of-the-art imaging technology for accurate diagnosis</p>
+                                </div>
+                            </div>
+                            <div class="slide">
+                                <div class="slide-image">
+                                    <i class="fas fa-ambulance" style="font-size: 4rem; color: #94a3b8;"></i>
+                                    <div style="margin-top: 15px; color: #64748b;">Emergency Care Image</div>
+                                </div>
+                                <div class="slide-content">
+                                    <h3 class="slide-title">24/7 Emergency Care</h3>
+                                    <p class="slide-description">Round-the-clock medical services for urgent healthcare needs</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slider-nav">
+                            <button class="slider-btn" id="prevBtn">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="slider-btn" id="nextBtn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="slider-dots" id="sliderDots">
+                            <!-- Dots will be added dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features Section -->
+                <div class="features-section">
+                    <h2 class="section-title">How SMAI Works</h2>
+                    <div class="features-grid">
+                        <div class="feature-card" onclick="switchPage('tool-page')">
+                            <div class="feature-icon">
+                                <i class="fas fa-upload"></i>
+                            </div>
+                            <h3 class="feature-title">Upload Medical Images</h3>
+                            <p class="feature-description">Easily upload X-rays, CT scans, MRI images or injury photos through our secure platform.</p>
+                        </div>
+                        <div class="feature-card" onclick="switchPage('tool-page')">
+                            <div class="feature-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h3 class="feature-title">AI Analysis</h3>
+                            <p class="feature-description">Our advanced AI algorithms analyze your medical images with 98.2% accuracy.</p>
+                        </div>
+                        <div class="feature-card" onclick="switchPage('tool-page')">
+                            <div class="feature-icon">
+                                <i class="fas fa-file-medical"></i>
+                            </div>
+                            <h3 class="feature-title">Get Detailed Report</h3>
+                            <p class="feature-description">Receive comprehensive analysis with findings, severity assessment, and recommendations.</p>
+                        </div>
+                        <div class="feature-card" onclick="switchPage('hospitals-page')">
+                            <div class="feature-icon">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <h3 class="feature-title">Connect with Specialists</h3>
+                            <p class="feature-description">Based on results, connect with appropriate medical specialists for further consultation.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Excellence Section -->
+                <div class="ai-section">
+                    <div class="ai-content">
+                        <div class="ai-text">
+                            <h2 class="ai-title">The Power of AI in Medical Diagnosis</h2>
+                            <p class="ai-description">Our cutting-edge artificial intelligence system is trained on millions of medical images, enabling it to detect patterns and anomalies with unprecedented accuracy.</p>
+                            <ul class="ai-features">
+                                <li class="ai-feature">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Detects 50+ medical conditions from images</span>
+                                </li>
+                                <li class="ai-feature">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Processes images in seconds, not hours</span>
+                                </li>
+                                <li class="ai-feature">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Continuously learns and improves accuracy</span>
+                                </li>
+                                <li class="ai-feature">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Provides detailed analysis with confidence scores</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="ai-visual">
+                            <i class="fas fa-brain brain-icon"></i>
+                            <div class="pulse-ring"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Section -->
+                <div class="stats-section">
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-value">98.2%</div>
+                            <div class="stat-label">Accuracy Rate</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">50K+</div>
+                            <div class="stat-label">Analyses Completed</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">2.5M+</div>
+                            <div class="stat-label">Medical Images Processed</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">24/7</div>
+                            <div class="stat-label">Available Support</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tool Page -->
+            <section id="tool-page" class="page">
+                <div class="tool-section">
+                    <div class="tool-container">
+                        <h2 class="section-title">Medical Imaging Analysis</h2>
+                        
+                        <div class="location-card">
+                            <div class="location-info">
+                                <h3>Location Services</h3>
+                                <p id="toolLocationStatus">Click "Update Location" to detect your location</p>
+                            </div>
+                            <button class="hero-btn location-btn" onclick="getUserLocation()">
+                                <i class="fas fa-location-arrow"></i> Update Location
+                            </button>
+                        </div>
+
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text">
+                                <h3>Upload Medical Image</h3>
+                                <p>Drag & drop or click to upload X-Ray, CT, MRI, or injury images</p>
+                                <p style="font-size: 0.9rem; color: #64748b;">Supported formats: JPG, PNG, DICOM | Max size: 15MB</p>
+                            </div>
+                            <input type="file" id="fileInput" class="file-input" accept="image/*,.dcm">
+                            <div class="button-group">
+                                <button class="upload-button" onclick="document.getElementById('fileInput').click()">
+                                    <i class="fas fa-folder-open"></i> Choose Medical Image
+                                </button>
+                                <button class="camera-button" onclick="openCamera()">
+                                    <i class="fas fa-camera"></i> Use Camera
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="analysis-type">
+                            <button class="analysis-type-btn active" onclick="setAnalysisType('xray')">
+                                <i class="fas fa-x-ray"></i> X-Ray Analysis
+                            </button>
+                            <button class="analysis-type-btn" onclick="setAnalysisType('injury')">
+                                <i class="fas fa-bone"></i> Injury Analysis
+                            </button>
+                            <button class="analysis-type-btn" onclick="setAnalysisType('scan')">
+                                <i class="fas fa-brain"></i> CT/MRI Scan
+                            </button>
+                        </div>
+
+                        <div class="preview-container" id="previewContainer">
+                            <h3>Medical Image Preview</h3>
+                            <img id="imagePreview" src="" alt="Medical image preview">
+                        </div>
+
+                        <button class="analyze-btn" id="analyzeBtn" onclick="analyzeImage()" disabled>
+                            <i class="fas fa-search"></i> Advanced AI Analysis
+                        </button>
+
+                        <div class="result-section" id="resultSection">
+                            <div class="severity-indicator" id="severityIndicator">
+                                <i class="fas fa-spinner fa-spin"></i> AI Analysis in Progress...
+                            </div>
+                            
+                            <div class="confidence-meter">
+                                <div class="confidence-level" id="confidenceLevel" style="width: 0%"></div>
+                            </div>
+                            <div style="text-align: center; font-size: 0.9rem; color: #64748b;" id="confidenceText">
+                                AI Confidence: Calculating...
+                            </div>
+                            
+                            <div id="analysisResult">
+                                <!-- Analysis results will appear here -->
+                            </div>
+                            
+                            <div class="recommendations" id="recommendations">
+                                <!-- Recommendations will appear here -->
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="emergency-btn" id="emergencyBtn" onclick="showEmergencyAlert()" style="display: none;">
+                                    <i class="fas fa-phone-alt"></i> Emergency Call
+                                </button>
+                                <button class="appointment-btn" id="appointmentBtn" onclick="bookAppointment()" style="display: none;">
+                                    <i class="fas fa-calendar-check"></i> Book Appointment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Hospitals Page -->
+            <section id="hospitals-page" class="page">
+                <div class="hospitals-section">
+                    <div class="hospitals-container">
+                        <h2 class="section-title">Find Nearby Hospitals</h2>
+                        
+                        <div class="location-card">
+                            <div class="location-info">
+                                <h3>Your Current Location</h3>
+                                <p id="hospitalsLocationStatus">Location not detected yet</p>
+                            </div>
+                            <button class="hero-btn location-btn" onclick="getUserLocation()">
+                                <i class="fas fa-location-arrow"></i> Update Location
+                            </button>
+                        </div>
+                        
+                        <div class="hospitals-grid" id="hospitalsGrid">
+                            <!-- Hospitals will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>SMAI</h3>
+                    <p style="color: #cbd5e1; line-height: 1.6;">
+                        Advanced AI-powered medical imaging analysis for accurate, fast, and accessible healthcare worldwide.
+                    </p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="switchPage('home-page')">Home</a></li>
+                        <li><a href="#" onclick="switchPage('tool-page')">AI Analysis</a></li>
+                        <li><a href="#" onclick="switchPage('hospitals-page')">Find Hospitals</a></li>
+                        <li><a href="#">Emergency</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-phone"></i> +91 8106467265</li>
+                        <li><i class="fas fa-envelope"></i> care@smai.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Kolkata, India</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Follow Us</h3>
+                    <div style="display: flex; gap: 15px; margin-top: 20px;">
+                        <a href="#" style="color: #cbd5e1; font-size: 1.2rem;"><i class="fab fa-facebook"></i></a>
+                        <a href="#" style="color: #cbd5e1; font-size: 1.2rem;"><i class="fab fa-twitter"></i></a>
+                        <a href="#" style="color: #cbd5e1; font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
+                        <a href="#" style="color: #cbd5e1; font-size: 1.2rem;"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 SMAI. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" data-target="home-page">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="#" class="nav-item" data-target="tool-page">
+            <i class="fas fa-camera nav-icon"></i>
+            <span class="nav-label">AI Analysis</span>
+        </a>
+        <a href="#" class="nav-item" data-target="hospitals-page">
+            <i class="fas fa-hospital nav-icon"></i>
+            <span class="nav-label">Hospitals</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showEmergencyAlert()">
+            <i class="fas fa-phone-alt nav-icon"></i>
+            <span class="nav-label">Emergency</span>
+        </a>
+    </nav>
+
+    <!-- Camera Modal -->
+    <div class="camera-modal" id="cameraModal">
+        <div class="camera-content">
+            <h2 style="margin-bottom: 20px; text-align: center;">Take a Medical Image</h2>
+            <div class="camera-preview">
+                <video id="cameraVideo" autoplay playsinline></video>
+                <canvas id="cameraCanvas" style="display: none;"></canvas>
+            </div>
+            <div class="camera-actions">
+                <button class="capture-btn" id="captureBtn">
+                    <i class="fas fa-camera"></i> Capture Image
+                </button>
+                <button class="cancel-camera-btn" onclick="closeCamera()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emergency Alert Modal -->
+    <div class="emergency-modal" id="emergencyModal">
+        <div class="emergency-content">
+            <div class="emergency-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h2 class="emergency-title">MEDICAL EMERGENCY</h2>
+            <p class="emergency-message" id="emergencyMessage">
+                Based on our AI analysis, this appears to be a critical medical condition requiring immediate attention.
+            </p>
+            <div class="emergency-actions">
+                <button class="emergency-call-btn" onclick="initiateEmergencyCall()">
+                    <i class="fas fa-phone"></i> Call Emergency
+                </button>
+                <button class="emergency-cancel-btn" onclick="closeEmergencyAlert()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeLoginModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 class="modal-title">Welcome Back</h2>
+            <p class="modal-subtitle">Sign in to your SMAI account</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="submit-btn">Sign In</button>
+                <div class="form-footer">
+                    <p>Don't have an account? <a href="#" id="showSignup">Sign Up</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signupModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeSignupModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 class="modal-title">Create Account</h2>
+            <p class="modal-subtitle">Join SMAI today</p>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label class="form-label" for="fullName">Full Name</label>
+                    <input type="text" id="fullName" class="form-input" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" class="form-input" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" class="form-input" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" class="form-input" placeholder="Confirm your password" required>
+                </div>
+                <button type="submit" class="submit-btn">Create Account</button>
+                <div class="form-footer">
+                    <p>Already have an account? <a href="#" id="showLogin">Sign In</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // App State
+        const appState = {
+            currentPage: 'home-page',
+            currentUser: null,
+            sliderIndex: 0,
+            sliderItems: 3,
+            userLocation: null,
+            currentImageFile: null,
+            currentAnalysisType: 'xray',
+            currentSeverity: null,
+            hospitals: [
+                {
+                    name: "Vision Multispeciality Hospital",
+                    address: "D.no 14-1-46/A, Near Andhra Bank, Pithapuram Main Road, Pithapuram-533450",
+                    phone: "+918106467265",
+                    whatsapp: "+918106467265",
+                    specialties: ["General Medicine", "Orthopedics", "Radiology"]
+                },
+                {
+                    name: "Maurya Hospital",
+                    address: "Old Sri Venkateswara Nursing Home Premises, Near Santha Cheruvu, Mantripragadavari Street, Cinema Hall Road-533001",
+                    phone: "+918106467265",
+                    whatsapp: "+918106467265",
+                    specialties: ["Urology", "Andrology", "General Surgery"]
+                },
+                {
+                    name: "Medway Hospital",
+                    address: "No, 11-11-1, Nookalama Temple Street, Ramaraopeta-533004",
+                    phone: "+918106467265",
+                    whatsapp: "+918106467265",
+                    specialties: ["Cardiology", "Neurology", "Emergency Care"]
+                },
+                {
+                    name: "Raju Garu Hospital",
+                    address: "Pydikondala St, Yanam-533464",
+                    phone: "+918106467265",
+                    whatsapp: "+918106467265",
+                    specialties: ["Pediatrics", "Gynecology", "Internal Medicine"]
+                }
+            ]
+        };
+
+        // DOM Elements
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const loginModal = document.getElementById('loginModal');
+        const signupModal = document.getElementById('signupModal');
+        const closeLoginModal = document.getElementById('closeLoginModal');
+        const closeSignupModal = document.getElementById('closeSignupModal');
+        const showSignup = document.getElementById('showSignup');
+        const showLogin = document.getElementById('showLogin');
+        const authButtons = document.getElementById('authButtons');
+        const userProfile = document.getElementById('userProfile');
+        const navItems = document.querySelectorAll('.nav-item');
+        const slider = document.getElementById('slider');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const sliderDots = document.getElementById('sliderDots');
+        const homeLocationStatus = document.getElementById('homeLocationStatus');
+        const toolLocationStatus = document.getElementById('toolLocationStatus');
+        const hospitalsLocationStatus = document.getElementById('hospitalsLocationStatus');
+        const fileInput = document.getElementById('fileInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const previewContainer = document.getElementById('previewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const resultSection = document.getElementById('resultSection');
+        const severityIndicator = document.getElementById('severityIndicator');
+        const analysisResult = document.getElementById('analysisResult');
+        const recommendations = document.getElementById('recommendations');
+        const emergencyBtn = document.getElementById('emergencyBtn');
+        const appointmentBtn = document.getElementById('appointmentBtn');
+        const confidenceLevel = document.getElementById('confidenceLevel');
+        const confidenceText = document.getElementById('confidenceText');
+        const hospitalsGrid = document.getElementById('hospitalsGrid');
+        const emergencyModal = document.getElementById('emergencyModal');
+        const emergencyMessage = document.getElementById('emergencyMessage');
+        const cameraModal = document.getElementById('cameraModal');
+        const cameraVideo = document.getElementById('cameraVideo');
+        const cameraCanvas = document.getElementById('cameraCanvas');
+        const captureBtn = document.getElementById('captureBtn');
+
+        // Initialize the app
+        function initializeApp() {
+            setupEventListeners();
+            setupNavigation();
+            initializeSlider();
+            
+            // Check if user is already logged in (for demo purposes)
+            const demoUser = localStorage.getItem('smaiUser');
+            if (demoUser) {
+                appState.currentUser = JSON.parse(demoUser);
+                updateUserInterface();
+            }
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Auth modals
+            loginBtn.addEventListener('click', () => loginModal.classList.add('active'));
+            signupBtn.addEventListener('click', () => signupModal.classList.add('active'));
+            closeLoginModal.addEventListener('click', () => loginModal.classList.remove('active'));
+            closeSignupModal.addEventListener('click', () => signupModal.classList.remove('active'));
+            showSignup.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginModal.classList.remove('active');
+                signupModal.classList.add('active');
+            });
+            showLogin.addEventListener('click', (e) => {
+                e.preventDefault();
+                signupModal.classList.remove('active');
+                loginModal.classList.add('active');
+            });
+
+            // Form submissions
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('signupForm').addEventListener('submit', handleSignup);
+
+            // Slider controls
+            prevBtn.addEventListener('click', showPrevSlide);
+            nextBtn.addEventListener('click', showNextSlide);
+
+            // File upload
+            uploadArea.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            // Drag and drop
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                if (e.dataTransfer.files.length > 0) {
+                    handleFileSelect({ target: { files: e.dataTransfer.files } });
+                }
+            });
+
+            // Camera capture
+            captureBtn.addEventListener('click', captureImage);
+
+            // Close modals when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === loginModal) loginModal.classList.remove('active');
+                if (e.target === signupModal) signupModal.classList.remove('active');
+                if (e.target === emergencyModal) closeEmergencyAlert();
+                if (e.target === cameraModal) closeCamera();
+            });
+        }
+
+        // Navigation
+        function setupNavigation() {
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Update active nav item
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show the selected page
+                    const target = this.getAttribute('data-target');
+                    if (target) {
+                        switchPage(target);
+                    }
+                });
+            });
+        }
+
+        function switchPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show the selected page
+            document.getElementById(pageId).classList.add('active');
+            appState.currentPage = pageId;
+            
+            // If switching to hospitals page, update hospitals list
+            if (pageId === 'hospitals-page') {
+                displayHospitals();
+            }
+        }
+
+        // Slider functionality
+        function initializeSlider() {
+            // Create dots for slider
+            for (let i = 0; i < appState.sliderItems; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => showSlide(i));
+                sliderDots.appendChild(dot);
+            }
+            
+            // Auto advance slider
+            setInterval(() => {
+                showNextSlide();
+            }, 5000);
+        }
+
+        function showSlide(index) {
+            appState.sliderIndex = index;
+            slider.style.transform = `translateX(-${index * 100}%)`;
+            
+            // Update dots
+            document.querySelectorAll('.slider-dots .dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        function showPrevSlide() {
+            let newIndex = appState.sliderIndex - 1;
+            if (newIndex < 0) newIndex = appState.sliderItems - 1;
+            showSlide(newIndex);
+        }
+
+        function showNextSlide() {
+            let newIndex = appState.sliderIndex + 1;
+            if (newIndex >= appState.sliderItems) newIndex = 0;
+            showSlide(newIndex);
+        }
+
+        // Location Services
+        function getUserLocation() {
+            // Update all location status indicators
+            homeLocationStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Detecting your location...';
+            toolLocationStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Detecting your location...';
+            hospitalsLocationStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Detecting your location...';
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        appState.userLocation = {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        };
+                        
+                        const locationText = `Location: ${appState.userLocation.latitude.toFixed(4)}, ${appState.userLocation.longitude.toFixed(4)}`;
+                        
+                        homeLocationStatus.innerHTML = `<i class="fas fa-check-circle"></i> ${locationText}`;
+                        toolLocationStatus.innerHTML = `<i class="fas fa-check-circle"></i> ${locationText}`;
+                        hospitalsLocationStatus.innerHTML = `<i class="fas fa-check-circle"></i> ${locationText}`;
+                        
+                        // Update hospitals list if on hospitals page
+                        if (appState.currentPage === 'hospitals-page') {
+                            displayHospitals();
+                        }
+                        
+                        console.log("Location detected successfully:", appState.userLocation);
+                    },
+                    error => {
+                        console.error("Error getting location:", error);
+                        let errorMessage = "Could not detect location";
+                        
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage = "Location access denied. Please enable location permissions.";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage = "Location information unavailable.";
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage = "Location request timed out.";
+                                break;
+                            default:
+                                errorMessage = "An unknown error occurred.";
+                                break;
+                        }
+                        
+                        homeLocationStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`;
+                        toolLocationStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`;
+                        hospitalsLocationStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`;
+                        
+                        // Use default location for demo purposes
+                        useDefaultLocation();
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 60000
+                    }
+                );
+            } else {
+                const errorMessage = "Geolocation is not supported by this browser";
+                homeLocationStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`;
+                toolLocationStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`;
+                hospitalsLocationStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`;
+                
+                // Use default location for demo purposes
+                useDefaultLocation();
+            }
+        }
+
+        function useDefaultLocation() {
+            // Use a default location for demo purposes (Kolkata, India)
+            appState.userLocation = {
+                latitude: 22.5726,
+                longitude: 88.3639
+            };
+            
+            const locationText = `Demo Location: ${appState.userLocation.latitude.toFixed(4)}, ${appState.userLocation.longitude.toFixed(4)}`;
+            
+            homeLocationStatus.innerHTML = `<i class="fas fa-info-circle"></i> ${locationText} (Demo Mode)`;
+            toolLocationStatus.innerHTML = `<i class="fas fa-info-circle"></i> ${locationText} (Demo Mode)`;
+            hospitalsLocationStatus.innerHTML = `<i class="fas fa-info-circle"></i> ${locationText} (Demo Mode)`;
+            
+            // Update hospitals list if on hospitals page
+            if (appState.currentPage === 'hospitals-page') {
+                displayHospitals();
+            }
+        }
+
+        // Camera Functions
+        function openCamera() {
+            cameraModal.classList.add('active');
+            
+            // Access the camera
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        cameraVideo.srcObject = stream;
+                    })
+                    .catch(function(error) {
+                        console.error("Camera error: ", error);
+                        alert("Unable to access camera. Please check permissions.");
+                        closeCamera();
+                    });
+            } else {
+                alert("Your browser doesn't support camera access.");
+                closeCamera();
+            }
+        }
+
+        function closeCamera() {
+            cameraModal.classList.remove('active');
+            
+            // Stop camera stream
+            if (cameraVideo.srcObject) {
+                const tracks = cameraVideo.srcObject.getTracks();
+                tracks.forEach(track => track.stop());
+                cameraVideo.srcObject = null;
+            }
+        }
+
+        function captureImage() {
+            const context = cameraCanvas.getContext('2d');
+            cameraCanvas.width = cameraVideo.videoWidth;
+            cameraCanvas.height = cameraVideo.videoHeight;
+            context.drawImage(cameraVideo, 0, 0, cameraCanvas.width, cameraCanvas.height);
+            
+            // Convert canvas to blob and create file
+            cameraCanvas.toBlob(function(blob) {
+                const file = new File([blob], "camera-capture.jpg", { type: "image/jpeg" });
+                handleCameraFile(file);
+            }, 'image/jpeg');
+            
+            closeCamera();
+        }
+
+        function handleCameraFile(file) {
+            appState.currentImageFile = file;
+            
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                previewContainer.style.display = 'block';
+                analyzeBtn.disabled = false;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // File handling
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            
+            if (!files || files.length === 0) {
+                return;
+            }
+
+            const file = files[0];
+            appState.currentImageFile = file;
+
+            // Validate file type
+            if (!file.type.startsWith('image/') && !file.name.toLowerCase().endsWith('.dcm')) {
+                alert("Please select a medical image file (X-Ray, CT, MRI, JPG, PNG, DICOM)");
+                return;
+            }
+
+            // Validate file size (15MB max for medical images)
+            if (file.size > 15 * 1024 * 1024) {
+                alert("File too large. Please select an image under 15MB.");
+                return;
+            }
+
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                previewContainer.style.display = 'block';
+                analyzeBtn.disabled = false;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function setAnalysisType(type) {
+            appState.currentAnalysisType = type;
+            
+            // Update button states
+            document.querySelectorAll('.analysis-type-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Analysis functions
+        function analyzeImage() {
+            if (!appState.currentImageFile) {
+                alert("Please upload a medical image first");
+                return;
+            }
+
+            analyzeBtn.disabled = true;
+            analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AI Processing...';
+
+            // Show result section
+            resultSection.style.display = 'block';
+            severityIndicator.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deep AI Analysis Running...';
+
+            // Reset confidence meter
+            confidenceLevel.style.width = '0%';
+            confidenceText.textContent = 'AI Confidence: Initializing...';
+
+            // Simulate advanced AI analysis with progress
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 95) progress = 95;
+                confidenceLevel.style.width = `${progress}%`;
+                confidenceText.textContent = `AI Confidence: ${Math.round(progress)}% (Analyzing patterns...)`;
+                
+                if (progress >= 95) {
+                    clearInterval(progressInterval);
+                    
+                    // Complete analysis
+                    setTimeout(() => {
+                        const analysis = generateAdvancedAnalysis();
+                        displayResults(analysis);
+                        
+                        analyzeBtn.disabled = false;
+                        analyzeBtn.innerHTML = '<i class="fas fa-search"></i> Advanced AI Analysis';
+                    }, 1000);
+                }
+            }, 200);
+        }
+
+        function generateAdvancedAnalysis() {
+            // This is a simulation - in a real app, this would call an AI API
+            const conditions = {
+                xray: [
+                    { 
+                        name: "Normal Chest X-Ray", 
+                        severity: "low", 
+                        confidence: 94,
+                        findings: ["Clear lung fields", "Normal cardiac silhouette", "No acute abnormalities"],
+                        recommendations: ["Routine follow-up recommended", "No immediate intervention required"]
+                    },
+                    { 
+                        name: "Pneumonia with Consolidation", 
+                        severity: "medium", 
+                        confidence: 89,
+                        findings: ["Right lower lobe consolidation", "Air bronchograms present", "Mild pleural effusion"],
+                        recommendations: ["Antibiotic therapy recommended", "Chest follow-up in 2 weeks", "Monitor oxygen saturation"]
+                    },
+                    { 
+                        name: "Acute Fracture with Displacement", 
+                        severity: "high", 
+                        confidence: 96,
+                        findings: ["Transverse fracture of right humerus", "Cortical disruption with displacement", "Associated soft tissue swelling"],
+                        recommendations: ["Immediate orthopedic consultation required", "Closed reduction under anesthesia", "Immobilization with cast"]
+                    },
+                    { 
+                        name: "Suspicious Pulmonary Nodule - High Risk", 
+                        severity: "critical", 
+                        confidence: 91,
+                        findings: ["Solitary pulmonary nodule right upper lobe", "Spiculated margins", "Size: 2.3cm with rapid growth"],
+                        recommendations: ["Urgent CT scan with contrast recommended", "Pulmonology consultation within 48 hours", "CT-guided biopsy required"]
+                    }
+                ],
+                injury: [
+                    { 
+                        name: "Ankle Sprain", 
+                        severity: "low", 
+                        confidence: 92,
+                        findings: ["Ligamentous injury", "Mild joint effusion", "No fracture identified"],
+                        recommendations: ["RICE protocol", "Physical therapy", "Gradual return to activity"]
+                    },
+                    { 
+                        name: "Rotator Cuff Tear", 
+                        severity: "medium", 
+                        confidence: 88,
+                        findings: ["Supraspinatus tendon tear", "Mild muscle atrophy", "Subacromial bursitis"],
+                        recommendations: ["Shoulder specialist consultation", "Physical therapy", "Consider surgical repair"]
+                    },
+                    { 
+                        name: "Complex Fracture", 
+                        severity: "high", 
+                        confidence: 95,
+                        findings: ["Intra-articular distal radius fracture", "Dorsal angulation", "Radial shortening"],
+                        recommendations: ["Hand surgery consultation within 24 hours", "Closed reduction under anesthesia", "Possible ORIF surgery"]
+                    },
+                    { 
+                        name: "Multiple Trauma Injuries", 
+                        severity: "critical", 
+                        confidence: 93,
+                        findings: ["Multiple fractures with displacement", "Significant soft tissue injury", "Potential neurovascular compromise"],
+                        recommendations: ["Immediate trauma team activation", "Advanced imaging required", "Surgical intervention likely needed"]
+                    }
+                ],
+                scan: [
+                    { 
+                        name: "Normal Brain CT", 
+                        severity: "low", 
+                        confidence: 97,
+                        findings: ["Normal brain parenchyma", "No mass effect", "Ventricles normal size"],
+                        recommendations: ["No acute intracranial findings", "Routine follow-up as clinically indicated"]
+                    },
+                    { 
+                        name: "Disc Herniation", 
+                        severity: "medium", 
+                        confidence: 90,
+                        findings: ["L4-L5 posterior disc herniation", "Mild thecal sac compression", "Neural foraminal narrowing"],
+                        recommendations: ["Neurosurgery consultation", "Physical therapy", "Pain management evaluation"]
+                    },
+                    { 
+                        name: "Acute Ischemic Stroke", 
+                        severity: "high", 
+                        confidence: 94,
+                        findings: ["Hypodensity in left MCA territory", "Loss of gray-white differentiation", "Mass effect present"],
+                        recommendations: ["Immediate neurology consultation", "Consider thrombolysis", "Stroke protocol activation"]
+                    },
+                    { 
+                        name: "Complex Liver Mass - Suspicious for Malignancy", 
+                        severity: "critical", 
+                        confidence: 87,
+                        findings: ["Heterogeneous liver mass", "Irregular borders", "Portal venous phase washout"],
+                        recommendations: ["Hepatology consultation within 48 hours", "Triple-phase CT abdomen", "Biopsy for histopathological confirmation"]
+                    }
+                ]
+            };
+            
+            const typeConditions = conditions[appState.currentAnalysisType];
+            const randomCondition = typeConditions[Math.floor(Math.random() * typeConditions.length)];
+            
+            return {
+                condition: randomCondition.name,
+                severity: randomCondition.severity,
+                confidence: randomCondition.confidence,
+                findings: randomCondition.findings,
+                recommendations: randomCondition.recommendations
+            };
+        }
+
+        function displayResults(analysis) {
+            // Update confidence meter
+            confidenceLevel.style.width = `${analysis.confidence}%`;
+            confidenceText.textContent = `AI Confidence: ${analysis.confidence}% (High Reliability)`;
+            
+            // Update severity indicator
+            let severityClass = analysis.severity + '-severity';
+            let severityIcon = 'info-circle';
+            if (analysis.severity === 'high') severityIcon = 'exclamation-triangle';
+            if (analysis.severity === 'critical') severityIcon = 'radiation';
+            
+            severityIndicator.className = `severity-indicator ${severityClass}`;
+            severityIndicator.innerHTML = `<i class="fas fa-${severityIcon}"></i> ${analysis.condition} - ${analysis.severity.toUpperCase()} PRIORITY`;
+            
+            // Store current severity
+            appState.currentSeverity = analysis.severity;
+            
+            // Update analysis result
+            analysisResult.innerHTML = `
+                <div class="analysis-details">
+                    <h3><i class="fas fa-microscope"></i> Detailed Medical Findings</h3>
+                    <ul>
+                        ${analysis.findings.map(finding => `<li>${finding}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+            
+            // Update recommendations
+            recommendations.innerHTML = `
+                <h3><i class="fas fa-file-medical"></i> Medical Recommendations</h3>
+                <ul>
+                    ${analysis.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                </ul>
+            `;
+            
+            // Show appropriate action buttons
+            if (analysis.severity === 'critical' || analysis.severity === 'high') {
+                emergencyBtn.style.display = 'block';
+                appointmentBtn.style.display = 'none';
+                
+                // Auto-trigger emergency alert for critical cases
+                if (analysis.severity === 'critical') {
+                    setTimeout(() => {
+                        triggerEmergencyAlert(analysis.condition);
+                    }, 1500);
+                }
+            } else {
+                emergencyBtn.style.display = 'none';
+                appointmentBtn.style.display = 'block';
+            }
+        }
+
+        // Emergency Alert System
+        function triggerEmergencyAlert(condition) {
+            // Update emergency message with condition details
+            emergencyMessage.innerHTML = `
+                <strong>CRITICAL MEDICAL EMERGENCY</strong><br><br>
+                Condition: ${condition}<br>
+                Severity: CRITICAL<br><br>
+                Our AI analysis indicates this is a life-threatening condition requiring immediate medical attention.
+            `;
+            
+            // Show emergency modal
+            emergencyModal.classList.add('active');
+            
+            // Send emergency alert via WhatsApp if location is available
+            sendEmergencyWhatsAppAlert(condition);
+        }
+
+        function showEmergencyAlert() {
+            // For manual emergency button click
+            const condition = document.querySelector('.severity-indicator').textContent.split(' - ')[0];
+            triggerEmergencyAlert(condition);
+        }
+
+        function closeEmergencyAlert() {
+            emergencyModal.classList.remove('active');
+        }
+
+        function initiateEmergencyCall() {
+            // Close the modal first
+            closeEmergencyAlert();
+            
+            // Open phone dialer with emergency number
+            window.location.href = 'tel:+918106467265';
+            
+            // Send final emergency alert
+            sendFinalEmergencyAlert();
+        }
+
+        function sendEmergencyWhatsAppAlert(condition) {
+            if (!appState.userLocation) {
+                console.log("No location available for emergency alert");
+                return;
+            }
+            
+            let message = `🚨 MEDICAL EMERGENCY ALERT 🚨\n\n`;
+            message += `Condition: ${condition}\n`;
+            message += `Severity: CRITICAL\n\n`;
+            message += `Patient Location:\n`;
+            message += `Latitude: ${appState.userLocation.latitude.toFixed(6)}\n`;
+            message += `Longitude: ${appState.userLocation.longitude.toFixed(6)}\n\n`;
+            message += `Google Maps: https://www.google.com/maps?q=${appState.userLocation.latitude},${appState.userLocation.longitude}\n\n`;
+            message += `EMERGENCY CONTACT: +91 8106467265\n\n`;
+            message += `This is an automated emergency alert from SMAI. Patient requires immediate medical attention.`;
+            
+            // Encode message for WhatsApp URL
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/+918106467265?text=${encodedMessage}`;
+            
+            // Open WhatsApp in new tab (for demo purposes)
+            // In a real app, this would be sent automatically to emergency services
+            setTimeout(() => {
+                window.open(whatsappURL, '_blank');
+            }, 1000);
+        }
+
+        function sendFinalEmergencyAlert() {
+            if (!appState.userLocation) return;
+            
+            let message = `🚨 FINAL EMERGENCY CONFIRMATION 🚨\n\n`;
+            message += `Emergency services have been contacted.\n`;
+            message += `Patient Location:\n`;
+            message += `Latitude: ${appState.userLocation.latitude.toFixed(6)}\n`;
+            message += `Longitude: ${appState.userLocation.longitude.toFixed(6)}\n\n`;
+            message += `Stay on the line with emergency services.\n`;
+            message += `Keep the patient calm and stable.\n\n`;
+            message += `EMERGENCY CONTACT: +91 8106467265`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/+918106467265?text=${encodedMessage}`;
+            
+            // Open final alert in new tab
+            setTimeout(() => {
+                window.open(whatsappURL, '_blank');
+            }, 2000);
+        }
+
+        // Hospital functions
+        function displayHospitals() {
+            let hospitalsHTML = '';
+            
+            appState.hospitals.forEach(hospital => {
+                hospitalsHTML += `
+                    <div class="hospital-card">
+                        <div class="hospital-header">
+                            <div class="hospital-name">${hospital.name}</div>
+                            <div class="hospital-address">${hospital.address}</div>
+                        </div>
+                        <div class="hospital-body">
+                            <div class="hospital-info">
+                                <i class="fas fa-stethoscope"></i>
+                                <span>${hospital.specialties.join(', ')}</span>
+                            </div>
+                            <div class="hospital-actions">
+                                <button class="hospital-btn whatsapp-btn" onclick="contactHospital('${hospital.name}', '${hospital.whatsapp}', 'whatsapp')">
+                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                </button>
+                                <button class="hospital-btn call-btn" onclick="contactHospital('${hospital.name}', '${hospital.phone}', 'call')">
+                                    <i class="fas fa-phone"></i> Call
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            hospitalsGrid.innerHTML = hospitalsHTML;
+        }
+
+        function contactHospital(hospitalName, phoneNumber, method) {
+            let message = '';
+            
+            if (method === 'whatsapp') {
+                if (appState.currentSeverity) {
+                    message = `URGENT: Medical Assistance Needed\n\nHospital: ${hospitalName}\nMedical Condition: ${appState.currentSeverity} severity\n`;
+                } else {
+                    message = `Hello, I would like to inquire about medical services at ${hospitalName}.\n\n`;
+                }
+                
+                if (appState.userLocation) {
+                    message += `My Current Location: ${appState.userLocation.latitude.toFixed(4)}, ${appState.userLocation.longitude.toFixed(4)}\n`;
+                    message += `Google Maps: https://www.google.com/maps?q=${appState.userLocation.latitude},${appState.userLocation.longitude}`;
+                }
+                
+                message += `\n\nPlease provide immediate assistance.`;
+                
+                const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappURL, '_blank');
+            } else if (method === 'call') {
+                window.location.href = `tel:${phoneNumber}`;
+            }
+        }
+
+        function bookAppointment() {
+            // Use the first hospital for booking
+            const hospital = appState.hospitals[0];
+            
+            // Generate appointment time (next available slot)
+            const now = new Date();
+            const appointmentTime = new Date(now.getTime() + 2 * 60 * 60 * 1000); // 2 hours from now
+            
+            let message = `APPOINTMENT REQUEST\n\n`;
+            message += `Hospital: ${hospital.name}\n`;
+            message += `Requested Time: ${appointmentTime.toLocaleString()}\n\n`;
+            
+            if (appState.currentSeverity) {
+                message += `Medical Condition: ${appState.currentSeverity} severity\n`;
+            }
+            
+            if (appState.userLocation) {
+                message += `Patient Location: ${appState.userLocation.latitude.toFixed(4)}, ${appState.userLocation.longitude.toFixed(4)}\n`;
+                message += `Google Maps: https://www.google.com/maps?q=${appState.userLocation.latitude},${appState.userLocation.longitude}\n\n`;
+            }
+            
+            message += `Please confirm this appointment at your earliest convenience.`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${hospital.whatsapp}?text=${encodedMessage}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        // Auth functions
+        function handleLogin(e) {
+            e.preventDefault();
+            // In a real app, this would send a request to your backend
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Demo login - in a real app, validate credentials with backend
+            if (email && password) {
+                const user = {
+                    name: "Dr. John Smith",
+                    email: email
+                };
+                
+                appState.currentUser = user;
+                localStorage.setItem('smaiUser', JSON.stringify(user));
+                updateUserInterface();
+                loginModal.classList.remove('active');
+                
+                // Show success message
+                alert('Successfully logged in!');
+            } else {
+                alert('Please enter both email and password');
+            }
+        }
+
+        function handleSignup(e) {
+            e.preventDefault();
+            // In a real app, this would send a request to your backend
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Demo signup - in a real app, validate and create user in backend
+            if (fullName && email && password && confirmPassword) {
+                if (password !== confirmPassword) {
+                    alert('Passwords do not match');
+                    return;
+                }
+                
+                const user = {
+                    name: fullName,
+                    email: email
+                };
+                
+                appState.currentUser = user;
+                localStorage.setItem('smaiUser', JSON.stringify(user));
+                updateUserInterface();
+                signupModal.classList.remove('active');
+                
+                // Show success message
+                alert('Account created successfully!');
+            } else {
+                alert('Please fill in all fields');
+            }
+        }
+
+        function updateUserInterface() {
+            if (appState.currentUser) {
+                authButtons.style.display = 'none';
+                userProfile.style.display = 'flex';
+                document.querySelector('.profile-name').textContent = appState.currentUser.name;
+            } else {
+                authButtons.style.display = 'flex';
+                userProfile.style.display = 'none';
+            }
+        }
+
+        // Initialize the app when the page loads
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
