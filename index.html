@@ -15,21 +15,23 @@
         }
 
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --primary-light: #3b82f6;
-            --secondary: #7c3aed;
-            --accent: #06b6d4;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --light: #f8fafc;
-            --dark: #1e293b;
-            --gray: #64748b;
+            --primary: #3a86ff;
+            --primary-dark: #2667cc;
+            --primary-light: #5a9cff;
+            --secondary: #8338ec;
+            --accent: #06d6a0;
+            --success: #06d6a0;
+            --warning: #ffd166;
+            --danger: #ef476f;
+            --light: #f8f9fa;
+            --dark: #1a1a2e;
+            --gray: #6c757d;
             --card-bg: #ffffff;
             --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-            --gradient-secondary: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            --gradient-primary: linear-gradient(135deg, #3a86ff 0%, #8338ec 100%);
+            --gradient-secondary: linear-gradient(135deg, #06d6a0 0%, #3a86ff 100%);
+            --gradient-warning: linear-gradient(135deg, #ffd166 0%, #ff9e00 100%);
+            --gradient-danger: linear-gradient(135deg, #ef476f 0%, #ff006e 100%);
         }
 
         body {
@@ -183,11 +185,11 @@
             background: var(--gradient-primary);
             color: white;
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 8px 20px rgba(58, 134, 255, 0.3);
         }
 
         .nav-item:hover:not(.active) {
-            background: rgba(37, 99, 235, 0.1);
+            background: rgba(58, 134, 255, 0.1);
             color: var(--primary);
             transform: translateY(-2px);
         }
@@ -333,8 +335,9 @@
             text-align: center;
             position: relative;
             overflow: hidden;
-            height: 70vh;
-            min-height: 500px;
+            height: 56.25vw; /* 16:9 Aspect Ratio */
+            max-height: 80vh;
+            min-height: 300px;
             background-size: cover;
             background-position: center;
         }
@@ -394,6 +397,7 @@
             margin: 0 auto;
             position: relative;
             z-index: 1;
+            padding: 20px;
         }
 
         .hero-title {
@@ -402,6 +406,7 @@
             margin-bottom: 15px;
             animation: slideUp 0.8s ease-out;
             line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         .hero-subtitle {
@@ -410,6 +415,7 @@
             margin-bottom: 25px;
             animation: slideUp 0.8s ease-out 0.4s both;
             line-height: 1.5;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
 
         .hero-buttons {
@@ -440,6 +446,7 @@
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
         }
 
         .hero-btn:hover {
@@ -481,6 +488,7 @@
             font-size: 0.85rem;
             animation: slideUp 0.8s ease-out 0.8s both;
             line-height: 1.4;
+            backdrop-filter: blur(10px);
         }
 
         /* Slider Section */
@@ -669,7 +677,7 @@
             justify-content: center;
             margin: 0 auto 20px;
             font-size: 1.8rem;
-            background: rgba(37, 99, 235, 0.1);
+            background: rgba(58, 134, 255, 0.1);
             color: var(--primary);
         }
 
@@ -869,7 +877,7 @@
 
         .upload-area:hover, .upload-area.dragover {
             border-color: var(--primary);
-            background: rgba(37, 99, 235, 0.05);
+            background: rgba(58, 134, 255, 0.05);
         }
 
         .upload-icon {
@@ -983,15 +991,15 @@
             align-items: center;
             gap: 8px;
             font-weight: 600;
-            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 4px 6px -1px rgba(6, 214, 160, 0.3);
             width: 100%;
             justify-content: center;
         }
 
         .analyze-btn:hover:not(:disabled) {
-            background: #0da271;
+            background: #05b88a;
             transform: translateY(-2px);
-            box-shadow: 0 6px 10px -1px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 6px 10px -1px rgba(6, 214, 160, 0.4);
         }
 
         .analyze-btn:disabled {
@@ -1021,15 +1029,15 @@
         }
 
         .low-severity {
-            background: rgba(16, 185, 129, 0.1);
+            background: rgba(6, 214, 160, 0.1);
             color: #065f46;
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(6, 214, 160, 0.2);
         }
 
         .medium-severity {
-            background: rgba(245, 158, 11, 0.1);
+            background: rgba(255, 209, 102, 0.1);
             color: #92400e;
-            border: 1px solid rgba(245, 158, 11, 0.2);
+            border: 1px solid rgba(255, 209, 102, 0.2);
         }
 
         .high-severity {
@@ -1103,7 +1111,7 @@
 
         .appointment-btn {
             background: var(--primary);
-            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 6px -1px rgba(58, 134, 255, 0.3);
         }
 
         .emergency-btn:hover, .appointment-btn:hover {
@@ -1354,7 +1362,7 @@
         .form-input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
         }
 
         .submit-btn {
@@ -1373,7 +1381,7 @@
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 8px 20px rgba(58, 134, 255, 0.3);
         }
 
         .form-footer {
@@ -1636,8 +1644,238 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Responsive */
-        @media (min-width: 768px) {
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .app-header {
+                padding: 15px 20px;
+            }
+            
+            .logo-icon {
+                font-size: 1.5rem;
+            }
+            
+            .logo-text {
+                font-size: 1.3rem;
+            }
+            
+            .logo-subtitle {
+                font-size: 0.7rem;
+            }
+            
+            .auth-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .hero-section {
+                height: 56.25vw; /* 16:9 Aspect Ratio */
+                max-height: 60vh;
+                min-height: 250px;
+            }
+            
+            .hero-title {
+                font-size: 1.5rem;
+                margin-bottom: 10px;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 20px;
+            }
+            
+            .hero-btn {
+                padding: 10px 15px;
+                font-size: 0.85rem;
+                max-width: 180px;
+            }
+            
+            .location-status {
+                font-size: 0.8rem;
+                padding: 8px;
+            }
+            
+            .slider-section, .features-section, .ai-section, .stats-section {
+                padding: 30px 15px;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+            
+            .slide-image {
+                height: 200px;
+            }
+            
+            .slide-title {
+                font-size: 1.2rem;
+            }
+            
+            .slide-description {
+                font-size: 0.8rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .feature-card {
+                padding: 20px 15px;
+            }
+            
+            .feature-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+            
+            .feature-title {
+                font-size: 1rem;
+                margin-bottom: 8px;
+            }
+            
+            .feature-description {
+                font-size: 0.8rem;
+            }
+            
+            .ai-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .ai-text {
+                padding-right: 0;
+            }
+            
+            .ai-title {
+                font-size: 1.5rem;
+            }
+            
+            .ai-description {
+                font-size: 0.9rem;
+            }
+            
+            .ai-visual {
+                height: 250px;
+            }
+            
+            .brain-icon {
+                font-size: 4rem;
+            }
+            
+            .stats-container {
+                gap: 15px;
+            }
+            
+            .stat-card {
+                padding: 20px 10px;
+            }
+            
+            .stat-value {
+                font-size: 1.8rem;
+            }
+            
+            .stat-label {
+                font-size: 0.9rem;
+            }
+            
+            .tool-section {
+                padding: 15px;
+            }
+            
+            .tool-container {
+                padding: 20px;
+            }
+            
+            .location-card {
+                flex-direction: column;
+                padding: 15px;
+            }
+            
+            .upload-area {
+                padding: 20px 10px;
+            }
+            
+            .upload-icon {
+                font-size: 2rem;
+            }
+            
+            .upload-text h3 {
+                font-size: 1.1rem;
+            }
+            
+            .analysis-type-btn {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .analyze-btn {
+                width: 100%;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .emergency-btn, .appointment-btn {
+                flex: none;
+                width: 100%;
+            }
+            
+            .hospitals-section {
+                padding: 15px;
+            }
+            
+            .hospitals-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .app-footer {
+                padding: 30px 15px 15px;
+            }
+            
+            .footer-content {
+                gap: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .footer-column h3 {
+                font-size: 1.1rem;
+                margin-bottom: 10px;
+                padding-bottom: 5px;
+            }
+            
+            .footer-column h3::after {
+                width: 30px;
+                height: 2px;
+            }
+            
+            .footer-bottom {
+                padding-top: 15px;
+            }
+            
+            .bottom-nav {
+                padding: 10px 0;
+            }
+            
+            .nav-item {
+                padding: 6px 8px;
+                min-width: 60px;
+            }
+            
+            .nav-icon {
+                font-size: 1.1rem;
+            }
+            
+            .nav-label {
+                font-size: 0.6rem;
+            }
+        }
+
+        @media (min-width: 769px) {
             .app-header {
                 padding: 20px 40px;
             }
@@ -1870,7 +2108,7 @@
                     <div class="profile-avatar">
                         <i class="fas fa-user"></i>
                     </div>
-                    <div class="profile-name">M.seshu</div>
+                    <div class="profile-name">Dr. John Smith</div>
                 </div>
             </div>
         </header>
@@ -1902,7 +2140,9 @@
                                     <h1 class="hero-title">Real-Time Injury Detection</h1>
                                     <p class="hero-subtitle">Upload medical images and get AI-powered analysis within seconds</p>
                                     <div class="hero-buttons">
-                                       
+                                        <button class="hero-btn location-btn" onclick="getUserLocation()">
+                                            <i class="fas fa-location-arrow"></i> Detect Location
+                                        </button>
                                     </div>
                                     <div class="location-status">
                                         <i class="fas fa-check-circle"></i> 98.2% accuracy in medical image analysis
@@ -1912,9 +2152,11 @@
                             <div class="hero-slide">
                                 <div class="hero-content">
                                     <h1 class="hero-title">Emergency Medical Assistance</h1>
-                                    <p class="hero-subtitle"></p>
+                                    <p class="hero-subtitle">Critical cases automatically connect you with nearest hospitals and emergency services</p>
                                     <div class="hero-buttons">
-                                       
+                                        <button class="hero-btn location-btn" onclick="getUserLocation()">
+                                            <i class="fas fa-location-arrow"></i> Detect Location
+                                        </button>
                                     </div>
                                     <div class="location-status">
                                         <i class="fas fa-shield-alt"></i> Your data is secure and encrypted
@@ -1924,9 +2166,11 @@
                             <div class="hero-slide">
                                 <div class="hero-content">
                                     <h1 class="hero-title">24/7 Medical Support</h1>
-                                    <p class="hero-subtitle"></p>
+                                    <p class="hero-subtitle">Round-the-clock AI-powered diagnosis and emergency response</p>
                                     <div class="hero-buttons">
-                                       
+                                        <button class="hero-btn location-btn" onclick="getUserLocation()">
+                                            <i class="fas fa-location-arrow"></i> Detect Location
+                                        </button>
                                     </div>
                                     <div class="location-status">
                                         <i class="fas fa-heartbeat"></i> Immediate assistance when you need it most
@@ -1952,7 +2196,7 @@
                                 <div class="slide-image" style="background: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2053&q=80') center/cover;">
                                 </div>
                                 <div class="slide-content">
-                                    <h3 class="slide-title">SESHU Medical Center</h3>
+                                    <h3 class="slide-title">SPANDAN Medical Center</h3>
                                     <p class="slide-description">The Largest Medical Care Institution of Eastern India</p>
                                 </div>
                             </div>
