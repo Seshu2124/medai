@@ -40,6 +40,93 @@
             padding-bottom: 80px; /* Space for bottom nav */
         }
 
+        /* Splash Screen */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .splash-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .splash-logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .splash-logo-icon {
+            font-size: 5rem;
+            color: white;
+            margin-bottom: 20px;
+            animation: heartbeat 1.5s ease-in-out infinite both;
+        }
+
+        .splash-logo-text {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .splash-logo-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .splash-loader {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .splash-loader-inner {
+            width: 100%;
+            height: 100%;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+            position: relative;
+        }
+
+        .splash-loader-inner::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border: 4px solid transparent;
+            border-top: 4px solid rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+        }
+
+        .splash-loader-inner::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border: 4px solid transparent;
+            border-top: 4px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: spin 3s linear infinite;
+        }
+
         /* App Container */
         .app-container {
             max-width: 1400px;
@@ -50,6 +137,14 @@
             display: flex;
             flex-direction: column;
             position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .app-container.loaded {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* Bottom Navigation Bar */
@@ -233,23 +328,60 @@
 
         /* Home Page */
         .hero-section {
-            background: var(--gradient-primary);
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==');
             color: white;
-            padding: 40px 20px;
+            padding: 0;
             text-align: center;
             position: relative;
             overflow: hidden;
+            height: 70vh;
+            min-height: 500px;
+            background-size: cover;
+            background-position: center;
         }
 
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="%23ffffff" opacity="0.05"><polygon points="0,0 1000,50 1000,100 0,100"></polygon></svg>');
+        .hero-slider {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .hero-slides {
+            display: flex;
+            width: 300%;
+            height: 100%;
+            transition: transform 0.8s ease-in-out;
+        }
+
+        .hero-slide {
+            width: 33.333%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .hero-slide:nth-child(1) {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==');
             background-size: cover;
+            background-position: center;
+        }
+
+        .hero-slide:nth-child(2) {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-slide:nth-child(3) {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1551076805-e1869033e561?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2032&q=80');
+            background-size: cover;
+            background-position: center;
         }
 
         .hero-content {
@@ -331,6 +463,31 @@
         .hero-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .hero-slider-nav {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .hero-slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .hero-slider-dot.active {
+            background: white;
+            transform: scale(1.2);
         }
 
         /* Location Status */
@@ -725,6 +882,7 @@
             transition: all 0.3s;
             background: #f8fafc;
             margin-bottom: 20px;
+            position: relative;
         }
 
         .upload-area:hover, .upload-area.dragover {
@@ -1130,6 +1288,296 @@
             font-size: 0.85rem;
         }
 
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 450px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--dark);
+            transform: scale(1.1);
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .modal-subtitle {
+            color: var(--gray);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--gray);
+        }
+
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Camera Modal */
+        .camera-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .camera-modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .camera-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            padding: 25px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .camera-preview {
+            width: 100%;
+            height: 300px;
+            background: #1e293b;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #cameraVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .camera-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .capture-btn, .cancel-camera-btn {
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .capture-btn {
+            background: var(--success);
+            color: white;
+        }
+
+        .cancel-camera-btn {
+            background: var(--gray);
+            color: white;
+        }
+
+        .capture-btn:hover, .cancel-camera-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Emergency Modal */
+        .emergency-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(239, 68, 68, 0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            animation: emergencyPulse 2s infinite;
+        }
+
+        .emergency-modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .emergency-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .emergency-icon {
+            font-size: 4rem;
+            color: var(--danger);
+            margin-bottom: 20px;
+            animation: pulse 1s infinite;
+        }
+
+        .emergency-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--danger);
+        }
+
+        .emergency-message {
+            color: var(--dark);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .emergency-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .emergency-call-btn, .emergency-cancel-btn {
+            padding: 14px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .emergency-call-btn {
+            background: var(--danger);
+            color: white;
+            flex: 2;
+        }
+
+        .emergency-cancel-btn {
+            background: var(--gray);
+            color: white;
+            flex: 1;
+        }
+
+        .emergency-call-btn:hover, .emergency-cancel-btn:hover {
+            transform: translateY(-2px);
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -1182,6 +1630,30 @@
             }
         }
 
+        /* New Animations for Splash Screen */
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.1);
+            }
+            50% {
+                transform: scale(1);
+            }
+            75% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* Responsive */
         @media (min-width: 768px) {
             .app-header {
@@ -1206,7 +1678,8 @@
             }
             
             .hero-section {
-                padding: 60px 40px;
+                height: 80vh;
+                min-height: 600px;
             }
             
             .hero-title {
@@ -1384,7 +1857,21 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
+    <!-- Splash Screen -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-logo">
+            <div class="splash-logo-icon">
+                <i class="fas fa-stethoscope"></i>
+            </div>
+            <div class="splash-logo-text">SMAI</div>
+            <div class="splash-logo-subtitle">Smart Medical AI</div>
+        </div>
+        <div class="splash-loader">
+            <div class="splash-loader-inner"></div>
+        </div>
+    </div>
+
+    <div class="app-container" id="appContainer">
         <!-- Header -->
         <header class="app-header">
             <div class="logo">
@@ -1414,27 +1901,78 @@
         <main class="app-content">
             <!-- Home Page -->
             <section id="home-page" class="page active">
-                <!-- Hero Section -->
+                <!-- Hero Section with Slider -->
                 <div class="hero-section">
-                    <div class="hero-content">
-                        <h1 class="hero-title">Revolutionizing Medical Diagnosis with AI</h1>
-                        <div class="quotation">
-                            "YOUR PHOTO OUR AI - GET AN APPOINTMENT TO THE NEAREST HOSPITAL WHEN EMERGENCY"
+                    <div class="hero-slider">
+                        <div class="hero-slides" id="heroSlides">
+                            <div class="hero-slide">
+                                <div class="hero-content">
+                                    <h1 class="hero-title">SMAI - Your Health, Our App</h1>
+                                    <div class="quotation">
+                                        "YOUR PHOTO OUR AI - GET AN APPOINTMENT TO THE NEAREST HOSPITAL WHEN EMERGENCY"
+                                    </div>
+                                    <p class="hero-subtitle">Advanced AI-powered medical imaging analysis for accurate, fast, and accessible healthcare</p>
+                                    <div class="hero-buttons">
+                                        <button class="hero-btn primary-btn" onclick="switchPage('tool-page')">
+                                            <i class="fas fa-camera"></i> Start Analysis
+                                        </button>
+                                        <button class="hero-btn secondary-btn" onclick="switchPage('hospitals-page')">
+                                            <i class="fas fa-hospital"></i> Find Hospitals
+                                        </button>
+                                        <button class="hero-btn location-btn" onclick="getUserLocation()">
+                                            <i class="fas fa-location-arrow"></i> Detect Location
+                                        </button>
+                                    </div>
+                                    <div class="location-status" id="homeLocationStatus">
+                                        <i class="fas fa-info-circle"></i> Location services will help find nearby hospitals
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hero-slide">
+                                <div class="hero-content">
+                                    <h1 class="hero-title">Real-Time Injury Detection</h1>
+                                    <div class="quotation">
+                                        "INSTANT ANALYSIS OF X-RAYS, CT SCANS & INJURY IMAGES"
+                                    </div>
+                                    <p class="hero-subtitle">Upload medical images and get AI-powered analysis within seconds</p>
+                                    <div class="hero-buttons">
+                                        <button class="hero-btn primary-btn" onclick="switchPage('tool-page')">
+                                            <i class="fas fa-upload"></i> Upload Image
+                                        </button>
+                                        <button class="hero-btn secondary-btn" onclick="switchPage('hospitals-page')">
+                                            <i class="fas fa-user-md"></i> Find Specialists
+                                        </button>
+                                    </div>
+                                    <div class="location-status">
+                                        <i class="fas fa-check-circle"></i> 98.2% accuracy in medical image analysis
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hero-slide">
+                                <div class="hero-content">
+                                    <h1 class="hero-title">Emergency Medical Assistance</h1>
+                                    <div class="quotation">
+                                        "24/7 EMERGENCY SUPPORT WITH AUTOMATED HOSPITAL CONNECTIONS"
+                                    </div>
+                                    <p class="hero-subtitle">Critical cases automatically connect you with nearest hospitals and emergency services</p>
+                                    <div class="hero-buttons">
+                                        <button class="hero-btn primary-btn" onclick="switchPage('tool-page')">
+                                            <i class="fas fa-first-aid"></i> Emergency Analysis
+                                        </button>
+                                        <button class="hero-btn secondary-btn" onclick="showEmergencyAlert()">
+                                            <i class="fas fa-phone-alt"></i> Emergency Call
+                                        </button>
+                                    </div>
+                                    <div class="location-status">
+                                        <i class="fas fa-shield-alt"></i> Your data is secure and encrypted
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <p class="hero-subtitle">Advanced AI-powered medical imaging analysis for accurate, fast, and accessible healthcare</p>
-                        <div class="hero-buttons">
-                            <button class="hero-btn primary-btn" onclick="switchPage('tool-page')">
-                                <i class="fas fa-camera"></i> Start Analysis
-                            </button>
-                            <button class="hero-btn secondary-btn" onclick="switchPage('hospitals-page')">
-                                <i class="fas fa-hospital"></i> Find Hospitals
-                            </button>
-                            <button class="hero-btn location-btn" onclick="getUserLocation()">
-                                <i class="fas fa-location-arrow"></i> Detect Location
-                            </button>
-                        </div>
-                        <div class="location-status" id="homeLocationStatus">
-                            <i class="fas fa-info-circle"></i> Location services will help find nearby hospitals
+                        <div class="hero-slider-nav">
+                            <div class="hero-slider-dot active" data-index="0"></div>
+                            <div class="hero-slider-dot" data-index="1"></div>
+                            <div class="hero-slider-dot" data-index="2"></div>
                         </div>
                     </div>
                 </div>
@@ -1445,9 +1983,7 @@
                     <div class="slider-container">
                         <div class="slider" id="slider">
                             <div class="slide">
-                                <div class="slide-image">
-                                    <i class="fas fa-hospital" style="font-size: 4rem; color: #94a3b8;"></i>
-                                    <div style="margin-top: 15px; color: #64748b;">SPANDAN Medical Center Image</div>
+                                <div class="slide-image" style="background: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2053&q=80') center/cover;">
                                 </div>
                                 <div class="slide-content">
                                     <h3 class="slide-title">SPANDAN Medical Center</h3>
@@ -1455,9 +1991,7 @@
                                 </div>
                             </div>
                             <div class="slide">
-                                <div class="slide-image">
-                                    <i class="fas fa-microscope" style="font-size: 4rem; color: #94a3b8;"></i>
-                                    <div style="margin-top: 15px; color: #64748b;">Advanced Diagnostics Image</div>
+                                <div class="slide-image" style="background: url('https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2032&q=80') center/cover;">
                                 </div>
                                 <div class="slide-content">
                                     <h3 class="slide-title">Advanced Diagnostics</h3>
@@ -1465,9 +1999,7 @@
                                 </div>
                             </div>
                             <div class="slide">
-                                <div class="slide-image">
-                                    <i class="fas fa-ambulance" style="font-size: 4rem; color: #94a3b8;"></i>
-                                    <div style="margin-top: 15px; color: #64748b;">Emergency Care Image</div>
+                                <div class="slide-image" style="background: url('https://images.unsplash.com/photo-1586773860418-d37222d8fce3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80') center/cover;">
                                 </div>
                                 <div class="slide-content">
                                     <h3 class="slide-title">24/7 Emergency Care</h3>
@@ -1606,7 +2138,7 @@
                             </div>
                             <input type="file" id="fileInput" class="file-input" accept="image/*,.dcm">
                             <div class="button-group">
-                                <button class="upload-button" onclick="document.getElementById('fileInput').click()">
+                                <button class="upload-button" id="uploadButton">
                                     <i class="fas fa-folder-open"></i> Choose Medical Image
                                 </button>
                                 <button class="camera-button" onclick="openCamera()">
@@ -1749,7 +2281,7 @@
             <i class="fas fa-hospital nav-icon"></i>
             <span class="nav-label">Hospitals</span>
         </a>
-        <a href="#" class="nav-item" onclick="showEmergencyAlert()">
+        <a href="#" class="nav-item" onclick="initiateEmergencyCall()">
             <i class="fas fa-phone-alt nav-icon"></i>
             <span class="nav-label">Emergency</span>
         </a>
@@ -1860,6 +2392,8 @@
             currentUser: null,
             sliderIndex: 0,
             sliderItems: 3,
+            heroSliderIndex: 0,
+            heroSliderItems: 3,
             userLocation: null,
             currentImageFile: null,
             currentAnalysisType: 'xray',
@@ -1897,6 +2431,8 @@
         };
 
         // DOM Elements
+        const splashScreen = document.getElementById('splashScreen');
+        const appContainer = document.getElementById('appContainer');
         const loginBtn = document.getElementById('loginBtn');
         const signupBtn = document.getElementById('signupBtn');
         const loginModal = document.getElementById('loginModal');
@@ -1912,11 +2448,14 @@
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const sliderDots = document.getElementById('sliderDots');
+        const heroSlides = document.getElementById('heroSlides');
+        const heroSliderDots = document.querySelectorAll('.hero-slider-dot');
         const homeLocationStatus = document.getElementById('homeLocationStatus');
         const toolLocationStatus = document.getElementById('toolLocationStatus');
         const hospitalsLocationStatus = document.getElementById('hospitalsLocationStatus');
         const fileInput = document.getElementById('fileInput');
         const uploadArea = document.getElementById('uploadArea');
+        const uploadButton = document.getElementById('uploadButton');
         const previewContainer = document.getElementById('previewContainer');
         const imagePreview = document.getElementById('imagePreview');
         const analyzeBtn = document.getElementById('analyzeBtn');
@@ -1938,16 +2477,26 @@
 
         // Initialize the app
         function initializeApp() {
-            setupEventListeners();
-            setupNavigation();
-            initializeSlider();
-            
-            // Check if user is already logged in (for demo purposes)
-            const demoUser = localStorage.getItem('smaiUser');
-            if (demoUser) {
-                appState.currentUser = JSON.parse(demoUser);
-                updateUserInterface();
-            }
+            // Show splash screen for 3 seconds
+            setTimeout(() => {
+                splashScreen.classList.add('hidden');
+                appContainer.classList.add('loaded');
+                
+                // Initialize the rest of the app after splash screen
+                setTimeout(() => {
+                    setupEventListeners();
+                    setupNavigation();
+                    initializeSlider();
+                    initializeHeroSlider();
+                    
+                    // Check if user is already logged in (for demo purposes)
+                    const demoUser = localStorage.getItem('smaiUser');
+                    if (demoUser) {
+                        appState.currentUser = JSON.parse(demoUser);
+                        updateUserInterface();
+                    }
+                }, 500);
+            }, 3000);
         }
 
         // Set up event listeners
@@ -1976,8 +2525,16 @@
             prevBtn.addEventListener('click', showPrevSlide);
             nextBtn.addEventListener('click', showNextSlide);
 
-            // File upload
-            uploadArea.addEventListener('click', () => fileInput.click());
+            // Hero slider dots
+            heroSliderDots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    showHeroSlide(index);
+                });
+            });
+
+            // File upload - FIXED: Only one event listener for file input
+            uploadButton.addEventListener('click', () => fileInput.click());
             fileInput.addEventListener('change', handleFileSelect);
             
             // Drag and drop
@@ -2043,6 +2600,26 @@
             if (pageId === 'hospitals-page') {
                 displayHospitals();
             }
+        }
+
+        // Hero Slider functionality
+        function initializeHeroSlider() {
+            // Auto advance hero slider
+            setInterval(() => {
+                let newIndex = appState.heroSliderIndex + 1;
+                if (newIndex >= appState.heroSliderItems) newIndex = 0;
+                showHeroSlide(newIndex);
+            }, 6000);
+        }
+
+        function showHeroSlide(index) {
+            appState.heroSliderIndex = index;
+            heroSlides.style.transform = `translateX(-${index * 33.333}%)`;
+            
+            // Update dots
+            heroSliderDots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
         }
 
         // Slider functionality
@@ -2492,11 +3069,16 @@
             
             // Send emergency alert via WhatsApp if location is available
             sendEmergencyWhatsAppAlert(condition);
+            
+            // Auto-dial emergency number after 3 seconds
+            setTimeout(() => {
+                initiateEmergencyCall();
+            }, 3000);
         }
 
         function showEmergencyAlert() {
             // For manual emergency button click
-            const condition = document.querySelector('.severity-indicator').textContent.split(' - ')[0];
+            const condition = "Unknown Medical Emergency";
             triggerEmergencyAlert(condition);
         }
 
@@ -2612,7 +3194,8 @@
                 
                 message += `\n\nPlease provide immediate assistance.`;
                 
-                const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                const encodedMessage = encodeURIComponent(message);
+                const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
                 window.open(whatsappURL, '_blank');
             } else if (method === 'call') {
                 window.location.href = `tel:${phoneNumber}`;
@@ -2620,89 +3203,106 @@
         }
 
         function bookAppointment() {
-            // Use the first hospital for booking
-            const hospital = appState.hospitals[0];
+            if (!appState.userLocation) {
+                alert("Please enable location services to find nearby hospitals for appointment booking.");
+                return;
+            }
             
-            // Generate appointment time (next available slot)
-            const now = new Date();
-            const appointmentTime = new Date(now.getTime() + 2 * 60 * 60 * 1000); // 2 hours from now
+            // Find the nearest hospital
+            const nearestHospital = appState.hospitals[0]; // In a real app, this would calculate distance
             
-            let message = `APPOINTMENT REQUEST\n\n`;
-            message += `Hospital: ${hospital.name}\n`;
-            message += `Requested Time: ${appointmentTime.toLocaleString()}\n\n`;
+            let message = `📅 APPOINTMENT REQUEST - SMAI MEDICAL AI\n\n`;
+            message += `I would like to book an appointment for medical consultation.\n\n`;
             
             if (appState.currentSeverity) {
-                message += `Medical Condition: ${appState.currentSeverity} severity\n`;
+                message += `Medical Condition: ${appState.currentSeverity.toUpperCase()} severity\n`;
+                message += `Based on SMAI AI Analysis\n\n`;
             }
+            
+            message += `Preferred Hospital: ${nearestHospital.name}\n`;
+            message += `Location: ${nearestHospital.address}\n\n`;
             
             if (appState.userLocation) {
-                message += `Patient Location: ${appState.userLocation.latitude.toFixed(4)}, ${appState.userLocation.longitude.toFixed(4)}\n`;
-                message += `Google Maps: https://www.google.com/maps?q=${appState.userLocation.latitude},${appState.userLocation.longitude}\n\n`;
+                message += `My Current Location: ${appState.userLocation.latitude.toFixed(4)}, ${appState.userLocation.longitude.toFixed(4)}\n`;
             }
             
-            message += `Please confirm this appointment at your earliest convenience.`;
+            message += `Please confirm appointment availability and timing.`;
             
             const encodedMessage = encodeURIComponent(message);
-            const whatsappURL = `https://wa.me/${hospital.whatsapp}?text=${encodedMessage}`;
+            const whatsappURL = `https://wa.me/${nearestHospital.whatsapp}?text=${encodedMessage}`;
             window.open(whatsappURL, '_blank');
         }
 
-        // Auth functions
+        // Authentication functions
         function handleLogin(e) {
             e.preventDefault();
-            // In a real app, this would send a request to your backend
+            
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
-            // Demo login - in a real app, validate credentials with backend
-            if (email && password) {
-                const user = {
-                    name: "Dr. John Smith",
-                    email: email
-                };
-                
-                appState.currentUser = user;
-                localStorage.setItem('smaiUser', JSON.stringify(user));
-                updateUserInterface();
-                loginModal.classList.remove('active');
-                
-                // Show success message
-                alert('Successfully logged in!');
-            } else {
-                alert('Please enter both email and password');
+            // Simple validation
+            if (!email || !password) {
+                alert("Please enter both email and password");
+                return;
             }
+            
+            // Simulate login process
+            const user = {
+                name: "Dr. John Smith",
+                email: email,
+                avatar: "JS"
+            };
+            
+            appState.currentUser = user;
+            localStorage.setItem('smaiUser', JSON.stringify(user));
+            
+            // Update UI
+            updateUserInterface();
+            
+            // Close modal
+            loginModal.classList.remove('active');
+            
+            // Show success message
+            showNotification("Login successful! Welcome back, " + user.name);
         }
 
         function handleSignup(e) {
             e.preventDefault();
-            // In a real app, this would send a request to your backend
+            
             const fullName = document.getElementById('fullName').value;
             const email = document.getElementById('signupEmail').value;
             const password = document.getElementById('signupPassword').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
             
-            // Demo signup - in a real app, validate and create user in backend
-            if (fullName && email && password && confirmPassword) {
-                if (password !== confirmPassword) {
-                    alert('Passwords do not match');
-                    return;
-                }
-                
-                const user = {
-                    name: fullName,
-                    email: email
-                };
-                
-                appState.currentUser = user;
-                localStorage.setItem('smaiUser', JSON.stringify(user));
-                updateUserInterface();
-                signupModal.classList.remove('active');
-                
-                // Show success message
-                alert('Account created successfully!');
-            } else {
-                alert('Please fill in all fields');
+            // Simple validation
+            if (!fullName || !email || !password || !confirmPassword) {
+                alert("Please fill in all fields");
+                return;
             }
+            
+            if (password !== confirmPassword) {
+                alert("Passwords do not match");
+                return;
+            }
+            
+            // Simulate signup process
+            const user = {
+                name: fullName,
+                email: email,
+                avatar: fullName.charAt(0).toUpperCase()
+            };
+            
+            appState.currentUser = user;
+            localStorage.setItem('smaiUser', JSON.stringify(user));
+            
+            // Update UI
+            updateUserInterface();
+            
+            // Close modal
+            signupModal.classList.remove('active');
+            
+            // Show success message
+            showNotification("Account created successfully! Welcome to SMAI, " + user.name);
         }
 
         function updateUserInterface() {
@@ -2710,10 +3310,45 @@
                 authButtons.style.display = 'none';
                 userProfile.style.display = 'flex';
                 document.querySelector('.profile-name').textContent = appState.currentUser.name;
+                document.querySelector('.profile-avatar').innerHTML = `<i class="fas fa-user"></i>`;
             } else {
                 authButtons.style.display = 'flex';
                 userProfile.style.display = 'none';
             }
+        }
+
+        function showNotification(message) {
+            // Create a notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--success);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                z-index: 3000;
+                animation: slideInRight 0.5s ease-out;
+                max-width: 300px;
+            `;
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-check-circle"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.5s ease-in';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 3000);
         }
 
         // Initialize the app when the page loads
