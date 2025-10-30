@@ -1959,7 +1959,7 @@
                                         <button class="hero-btn primary-btn" onclick="switchPage('tool-page')">
                                             <i class="fas fa-first-aid"></i> Emergency Analysis
                                         </button>
-                                        <button class="hero-btn secondary-btn" onclick="showEmergencyAlert()">
+                                        <button class="hero-btn secondary-btn" onclick="directEmergencyCall()">
                                             <i class="fas fa-phone-alt"></i> Emergency Call
                                         </button>
                                     </div>
@@ -2189,7 +2189,7 @@
                             </div>
                             
                             <div class="action-buttons">
-                                <button class="emergency-btn" id="emergencyBtn" onclick="showEmergencyAlert()" style="display: none;">
+                                <button class="emergency-btn" id="emergencyBtn" onclick="directEmergencyCall()" style="display: none;">
                                     <i class="fas fa-phone-alt"></i> Emergency Call
                                 </button>
                                 <button class="appointment-btn" id="appointmentBtn" onclick="bookAppointment()" style="display: none;">
@@ -2240,7 +2240,7 @@
                         <li><a href="#" onclick="switchPage('home-page')">Home</a></li>
                         <li><a href="#" onclick="switchPage('tool-page')">AI Analysis</a></li>
                         <li><a href="#" onclick="switchPage('hospitals-page')">Find Hospitals</a></li>
-                        <li><a href="#" onclick="showEmergencyAlert()">Emergency</a></li>
+                        <li><a href="#" onclick="directEmergencyCall()">Emergency</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -2281,7 +2281,7 @@
             <i class="fas fa-hospital nav-icon"></i>
             <span class="nav-label">Hospitals</span>
         </a>
-        <a href="#" class="nav-item" onclick="initiateEmergencyCall()">
+        <a href="#" class="nav-item" onclick="directEmergencyCall()">
             <i class="fas fa-phone-alt nav-icon"></i>
             <span class="nav-label">Emergency</span>
         </a>
@@ -2317,7 +2317,7 @@
                 Based on our AI analysis, this appears to be a critical medical condition requiring immediate attention.
             </p>
             <div class="emergency-actions">
-                <button class="emergency-call-btn" onclick="initiateEmergencyCall()">
+                <button class="emergency-call-btn" onclick="directEmergencyCall()">
                     <i class="fas fa-phone"></i> Call Emergency
                 </button>
                 <button class="emergency-cancel-btn" onclick="closeEmergencyAlert()">
@@ -3061,7 +3061,7 @@
                 <strong>CRITICAL MEDICAL EMERGENCY</strong><br><br>
                 Condition: ${condition}<br>
                 Severity: CRITICAL<br><br>
-                Our AI analysis indicates this is a life-threatening condition requiring immediate medical attention.
+                Our AI analysis indicates this is a life-threatening condition requiring immediate attention.
             `;
             
             // Show emergency modal
@@ -3072,7 +3072,7 @@
             
             // Auto-dial emergency number after 3 seconds
             setTimeout(() => {
-                initiateEmergencyCall();
+                directEmergencyCall();
             }, 3000);
         }
 
@@ -3086,11 +3086,12 @@
             emergencyModal.classList.remove('active');
         }
 
-        function initiateEmergencyCall() {
-            // Close the modal first
+        // NEW: Direct emergency call function
+        function directEmergencyCall() {
+            // Close any open emergency modal
             closeEmergencyAlert();
             
-            // Open phone dialer with emergency number
+            // Directly open phone dialer with emergency number
             window.location.href = 'tel:+918106467265';
             
             // Send final emergency alert
