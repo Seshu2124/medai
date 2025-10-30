@@ -328,7 +328,6 @@
 
         /* Home Page */
         .hero-section {
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==');
             color: white;
             padding: 0;
             text-align: center;
@@ -349,13 +348,13 @@
 
         .hero-slides {
             display: flex;
-            width: 300%;
+            width: 400%;
             height: 100%;
             transition: transform 0.8s ease-in-out;
         }
 
         .hero-slide {
-            width: 33.333%;
+            width: 25%;
             height: 100%;
             position: relative;
             display: flex;
@@ -367,19 +366,25 @@
         }
 
         .hero-slide:nth-child(1) {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==');
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://dev-seshu.pantheonsite.io/wp-content/uploads/2025/10/b3.png');
             background-size: cover;
             background-position: center;
         }
 
         .hero-slide:nth-child(2) {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://dev-seshu.pantheonsite.io/wp-content/uploads/2025/10/b4.png');
             background-size: cover;
             background-position: center;
         }
 
         .hero-slide:nth-child(3) {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1551076805-e1869033e561?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2032&q=80');
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://dev-seshu.pantheonsite.io/wp-content/uploads/2025/10/b2.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-slide:nth-child(4) {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://dev-seshu.pantheonsite.io/wp-content/uploads/2025/10/b1.png');
             background-size: cover;
             background-position: center;
         }
@@ -397,17 +402,6 @@
             margin-bottom: 15px;
             animation: slideUp 0.8s ease-out;
             line-height: 1.2;
-        }
-
-        .quotation {
-            font-size: 1.1rem;
-            font-style: italic;
-            margin-bottom: 20px;
-            opacity: 0.9;
-            animation: slideUp 0.8s ease-out 0.2s both;
-            border-left: 4px solid rgba(255, 255, 255, 0.5);
-            padding-left: 15px;
-            line-height: 1.4;
         }
 
         .hero-subtitle {
@@ -440,18 +434,6 @@
             flex: 1;
             max-width: 200px;
             justify-content: center;
-        }
-
-        .primary-btn {
-            background: white;
-            color: var(--primary);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .secondary-btn {
-            background: transparent;
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .location-btn {
@@ -1686,10 +1668,6 @@
                 font-size: 3rem;
             }
             
-            .quotation {
-                font-size: 1.5rem;
-            }
-            
             .hero-subtitle {
                 font-size: 1.2rem;
             }
@@ -1892,7 +1870,7 @@
                     <div class="profile-avatar">
                         <i class="fas fa-user"></i>
                     </div>
-                    <div class="profile-name">Dr. John Smith</div>
+                    <div class="profile-name">M.seshu</div>
                 </div>
             </div>
         </header>
@@ -1908,17 +1886,8 @@
                             <div class="hero-slide">
                                 <div class="hero-content">
                                     <h1 class="hero-title">SMAI - Your Health, Our App</h1>
-                                    <div class="quotation">
-                                        "YOUR PHOTO OUR AI - GET AN APPOINTMENT TO THE NEAREST HOSPITAL WHEN EMERGENCY"
-                                    </div>
                                     <p class="hero-subtitle">Advanced AI-powered medical imaging analysis for accurate, fast, and accessible healthcare</p>
                                     <div class="hero-buttons">
-                                        <button class="hero-btn primary-btn" onclick="switchPage('tool-page')">
-                                            <i class="fas fa-camera"></i> Start Analysis
-                                        </button>
-                                        <button class="hero-btn secondary-btn" onclick="switchPage('hospitals-page')">
-                                            <i class="fas fa-hospital"></i> Find Hospitals
-                                        </button>
                                         <button class="hero-btn location-btn" onclick="getUserLocation()">
                                             <i class="fas fa-location-arrow"></i> Detect Location
                                         </button>
@@ -1931,17 +1900,9 @@
                             <div class="hero-slide">
                                 <div class="hero-content">
                                     <h1 class="hero-title">Real-Time Injury Detection</h1>
-                                    <div class="quotation">
-                                        "INSTANT ANALYSIS OF X-RAYS, CT SCANS & INJURY IMAGES"
-                                    </div>
                                     <p class="hero-subtitle">Upload medical images and get AI-powered analysis within seconds</p>
                                     <div class="hero-buttons">
-                                        <button class="hero-btn primary-btn" onclick="switchPage('tool-page')">
-                                            <i class="fas fa-upload"></i> Upload Image
-                                        </button>
-                                        <button class="hero-btn secondary-btn" onclick="switchPage('hospitals-page')">
-                                            <i class="fas fa-user-md"></i> Find Specialists
-                                        </button>
+                                       
                                     </div>
                                     <div class="location-status">
                                         <i class="fas fa-check-circle"></i> 98.2% accuracy in medical image analysis
@@ -1951,20 +1912,24 @@
                             <div class="hero-slide">
                                 <div class="hero-content">
                                     <h1 class="hero-title">Emergency Medical Assistance</h1>
-                                    <div class="quotation">
-                                        "24/7 EMERGENCY SUPPORT WITH AUTOMATED HOSPITAL CONNECTIONS"
-                                    </div>
-                                    <p class="hero-subtitle">Critical cases automatically connect you with nearest hospitals and emergency services</p>
+                                    <p class="hero-subtitle"></p>
                                     <div class="hero-buttons">
-                                        <button class="hero-btn primary-btn" onclick="switchPage('tool-page')">
-                                            <i class="fas fa-first-aid"></i> Emergency Analysis
-                                        </button>
-                                        <button class="hero-btn secondary-btn" onclick="directEmergencyCall()">
-                                            <i class="fas fa-phone-alt"></i> Emergency Call
-                                        </button>
+                                       
                                     </div>
                                     <div class="location-status">
                                         <i class="fas fa-shield-alt"></i> Your data is secure and encrypted
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hero-slide">
+                                <div class="hero-content">
+                                    <h1 class="hero-title">24/7 Medical Support</h1>
+                                    <p class="hero-subtitle"></p>
+                                    <div class="hero-buttons">
+                                       
+                                    </div>
+                                    <div class="location-status">
+                                        <i class="fas fa-heartbeat"></i> Immediate assistance when you need it most
                                     </div>
                                 </div>
                             </div>
@@ -1973,6 +1938,7 @@
                             <div class="hero-slider-dot active" data-index="0"></div>
                             <div class="hero-slider-dot" data-index="1"></div>
                             <div class="hero-slider-dot" data-index="2"></div>
+                            <div class="hero-slider-dot" data-index="3"></div>
                         </div>
                     </div>
                 </div>
@@ -1986,7 +1952,7 @@
                                 <div class="slide-image" style="background: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2053&q=80') center/cover;">
                                 </div>
                                 <div class="slide-content">
-                                    <h3 class="slide-title">SPANDAN Medical Center</h3>
+                                    <h3 class="slide-title">SESHU Medical Center</h3>
                                     <p class="slide-description">The Largest Medical Care Institution of Eastern India</p>
                                 </div>
                             </div>
@@ -2393,7 +2359,7 @@
             sliderIndex: 0,
             sliderItems: 3,
             heroSliderIndex: 0,
-            heroSliderItems: 3,
+            heroSliderItems: 4,
             userLocation: null,
             currentImageFile: null,
             currentAnalysisType: 'xray',
@@ -2614,7 +2580,7 @@
 
         function showHeroSlide(index) {
             appState.heroSliderIndex = index;
-            heroSlides.style.transform = `translateX(-${index * 33.333}%)`;
+            heroSlides.style.transform = `translateX(-${index * 25}%)`;
             
             // Update dots
             heroSliderDots.forEach((dot, i) => {
