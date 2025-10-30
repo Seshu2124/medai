@@ -1568,6 +1568,91 @@
             transform: translateY(-2px);
         }
 
+        /* Location Permission Modal */
+        .location-permission-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .location-permission-modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .location-permission-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            padding: 25px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .location-permission-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .location-permission-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .location-permission-message {
+            color: var(--gray);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .location-permission-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .location-allow-btn, .location-deny-btn {
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .location-allow-btn {
+            background: var(--primary);
+            color: white;
+            flex: 2;
+        }
+
+        .location-deny-btn {
+            background: var(--gray);
+            color: white;
+            flex: 1;
+        }
+
+        .location-allow-btn:hover, .location-deny-btn:hover {
+            transform: translateY(-2px);
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -2123,8 +2208,8 @@
                         <div class="hero-slides" id="heroSlides">
                             <div class="hero-slide">
                                 <div class="hero-content">
-                                    <h1 class="hero-title"></h1>
-                                    <p class="hero-subtitle"></p>
+                                    <h1 class="hero-title">AI-Powered Medical Diagnosis</h1>
+                                    <p class="hero-subtitle">Upload medical images and get AI-powered analysis within seconds</p>
                                     <div class="hero-buttons">
                                         <button class="hero-btn location-btn" onclick="getUserLocation()">
                                             <i class="fas fa-location-arrow"></i> Detect Location
@@ -2149,8 +2234,8 @@
                             </div>
                             <div class="hero-slide">
                                 <div class="hero-content">
-                                    <h1 class="hero-title"></h1>
-                                    <p class="hero-subtitle"></p>
+                                    <h1 class="hero-title">Secure & Private</h1>
+                                    <p class="hero-subtitle">Your medical data is encrypted and secure</p>
                                     <div class="hero-buttons">
                                       
                                     </div>
@@ -2161,13 +2246,13 @@
                             </div>
                             <div class="hero-slide">
                                 <div class="hero-content">
-                                    <h1 class="hero-title"></h1>
-                                    <p class="hero-subtitle"></p>
+                                    <h1 class="hero-title">Emergency Response</h1>
+                                    <p class="hero-subtitle">Critical cases trigger immediate emergency protocols</p>
                                     <div class="hero-buttons">
                                         
                                     </div>
                                     <div class="location-status">
-                                        <i class="fas fa-heartbeat"></i> 
+                                        <i class="fas fa-heartbeat"></i> 24/7 emergency support available
                                     </div>
                                 </div>
                             </div>
@@ -2491,6 +2576,27 @@
         </a>
     </nav>
 
+    <!-- Location Permission Modal -->
+    <div class="location-permission-modal" id="locationPermissionModal">
+        <div class="location-permission-content">
+            <div class="location-permission-icon">
+                <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <h2 class="location-permission-title">Location Access Required</h2>
+            <p class="location-permission-message">
+                SMAI needs your location to find nearby hospitals and provide accurate medical assistance in emergencies.
+            </p>
+            <div class="location-permission-actions">
+                <button class="location-allow-btn" id="locationAllowBtn">
+                    <i class="fas fa-check"></i> Allow Location
+                </button>
+                <button class="location-deny-btn" id="locationDenyBtn">
+                    <i class="fas fa-times"></i> Use Without
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Camera Modal -->
     <div class="camera-modal" id="cameraModal">
         <div class="camera-content">
@@ -2602,6 +2708,8 @@
             currentImageFile: null,
             currentAnalysisType: 'xray',
             currentSeverity: null,
+            locationRetryCount: 0,
+            maxLocationRetries: 3,
             hospitals: [
                 {
                     name: "Vision Multispeciality Hospital",
@@ -2678,6 +2786,9 @@
         const cameraVideo = document.getElementById('cameraVideo');
         const cameraCanvas = document.getElementById('cameraCanvas');
         const captureBtn = document.getElementById('captureBtn');
+        const locationPermissionModal = document.getElementById('locationPermissionModal');
+        const locationAllowBtn = document.getElementById('locationAllowBtn');
+        const locationDenyBtn = document.getElementById('locationDenyBtn');
 
         // Initialize the app
         function initializeApp() {
@@ -2699,6 +2810,11 @@
                         appState.currentUser = JSON.parse(demoUser);
                         updateUserInterface();
                     }
+                    
+                    // Try to get location on app start
+                    setTimeout(() => {
+                        getUserLocation();
+                    }, 1000);
                 }, 500);
             }, 3000);
         }
@@ -2737,7 +2853,7 @@
                 });
             });
 
-            // File upload - FIXED: Only one event listener for file input
+            // File upload
             uploadButton.addEventListener('click', () => fileInput.click());
             fileInput.addEventListener('change', handleFileSelect);
             
@@ -2762,12 +2878,24 @@
             // Camera capture
             captureBtn.addEventListener('click', captureImage);
 
+            // Location permission buttons
+            locationAllowBtn.addEventListener('click', () => {
+                locationPermissionModal.classList.remove('active');
+                getUserLocation();
+            });
+            
+            locationDenyBtn.addEventListener('click', () => {
+                locationPermissionModal.classList.remove('active');
+                useIPBasedLocation();
+            });
+
             // Close modals when clicking outside
             window.addEventListener('click', (e) => {
                 if (e.target === loginModal) loginModal.classList.remove('active');
                 if (e.target === signupModal) signupModal.classList.remove('active');
                 if (e.target === emergencyModal) closeEmergencyAlert();
                 if (e.target === cameraModal) closeCamera();
+                if (e.target === locationPermissionModal) locationPermissionModal.classList.remove('active');
             });
         }
 
@@ -2865,93 +2993,227 @@
             showSlide(newIndex);
         }
 
-        // Location Services
+        // Enhanced Location Services
         function getUserLocation() {
-            // Update all location status indicators
-            homeLocationStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Detecting your location...';
-            toolLocationStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Detecting your location...';
-            hospitalsLocationStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Detecting your location...';
+            // Reset retry count if this is a fresh request
+            if (appState.locationRetryCount === 0) {
+                updateLocationStatus('detecting');
+            }
+            
+            // Check if we've exceeded retry limit
+            if (appState.locationRetryCount >= appState.maxLocationRetries) {
+                useIPBasedLocation();
+                return;
+            }
+            
+            appState.locationRetryCount++;
             
             if (navigator.geolocation) {
+                // Try high accuracy first
                 navigator.geolocation.getCurrentPosition(
                     position => {
-                        appState.userLocation = {
-                            latitude: position.coords.latitude,
-                            longitude: position.coords.longitude
-                        };
-                        
-                        const locationText = `Location: ${appState.userLocation.latitude.toFixed(4)}, ${appState.userLocation.longitude.toFixed(4)}`;
-                        
-                        homeLocationStatus.innerHTML = `<i class="fas fa-check-circle"></i> ${locationText}`;
-                        toolLocationStatus.innerHTML = `<i class="fas fa-check-circle"></i> ${locationText}`;
-                        hospitalsLocationStatus.innerHTML = `<i class="fas fa-check-circle"></i> ${locationText}`;
-                        
-                        // Update hospitals list if on hospitals page
-                        if (appState.currentPage === 'hospitals-page') {
-                            displayHospitals();
-                        }
-                        
-                        console.log("Location detected successfully:", appState.userLocation);
+                        handleLocationSuccess(position);
                     },
                     error => {
-                        console.error("Error getting location:", error);
-                        let errorMessage = "Could not detect location";
+                        console.error("High accuracy location error:", error);
                         
-                        switch(error.code) {
-                            case error.PERMISSION_DENIED:
-                                errorMessage = "Location access denied. Please enable location permissions.";
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                errorMessage = "Location information unavailable.";
-                                break;
-                            case error.TIMEOUT:
-                                errorMessage = "Location request timed out.";
-                                break;
-                            default:
-                                errorMessage = "An unknown error occurred.";
-                                break;
-                        }
-                        
-                        homeLocationStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`;
-                        toolLocationStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`;
-                        hospitalsLocationStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`;
-                        
-                        // Use default location for demo purposes
-                        useDefaultLocation();
+                        // Try with lower accuracy if high accuracy fails
+                        navigator.geolocation.getCurrentPosition(
+                            position => {
+                                handleLocationSuccess(position);
+                            },
+                            error => {
+                                console.error("Standard location error:", error);
+                                handleLocationError(error);
+                            },
+                            {
+                                enableHighAccuracy: false,
+                                timeout: 10000,
+                                maximumAge: 300000 // 5 minutes
+                            }
+                        );
                     },
                     {
                         enableHighAccuracy: true,
-                        timeout: 10000,
-                        maximumAge: 60000
+                        timeout: 15000,
+                        maximumAge: 60000 // 1 minute
                     }
                 );
             } else {
-                const errorMessage = "Geolocation is not supported by this browser";
-                homeLocationStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`;
-                toolLocationStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`;
-                hospitalsLocationStatus.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`;
-                
-                // Use default location for demo purposes
-                useDefaultLocation();
+                handleLocationError({ code: 0, message: "Geolocation not supported" });
             }
         }
 
-        function useDefaultLocation() {
-            // Use a default location for demo purposes (Kolkata, India)
+        function handleLocationSuccess(position) {
             appState.userLocation = {
-                latitude: 22.5726,
-                longitude: 88.3639
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                accuracy: position.coords.accuracy,
+                source: 'gps'
             };
             
-            const locationText = `Demo Location: ${appState.userLocation.latitude.toFixed(4)}, ${appState.userLocation.longitude.toFixed(4)}`;
+            const locationText = `Location: ${appState.userLocation.latitude.toFixed(4)}, ${appState.userLocation.longitude.toFixed(4)}`;
+            const accuracyText = appState.userLocation.accuracy < 1000 ? 
+                `(Accuracy: ${Math.round(appState.userLocation.accuracy)}m)` : 
+                `(Approximate location)`;
             
-            homeLocationStatus.innerHTML = `<i class="fas fa-info-circle"></i> ${locationText} (Demo Mode)`;
-            toolLocationStatus.innerHTML = `<i class="fas fa-info-circle"></i> ${locationText} (Demo Mode)`;
-            hospitalsLocationStatus.innerHTML = `<i class="fas fa-info-circle"></i> ${locationText} (Demo Mode)`;
+            updateLocationStatus('success', `${locationText} ${accuracyText}`);
+            
+            // Reset retry count on success
+            appState.locationRetryCount = 0;
             
             // Update hospitals list if on hospitals page
             if (appState.currentPage === 'hospitals-page') {
                 displayHospitals();
+            }
+            
+            console.log("Location detected successfully:", appState.userLocation);
+        }
+
+        function handleLocationError(error) {
+            console.error("Location error:", error);
+            let errorMessage = "Could not detect precise location";
+            
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage = "Location access denied. Using approximate location based on IP.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage = "Location information unavailable. Using IP-based location.";
+                    break;
+                case error.TIMEOUT:
+                    errorMessage = "Location request timed out. Using IP-based location.";
+                    break;
+                default:
+                    errorMessage = "Location service error. Using IP-based location.";
+                    break;
+            }
+            
+            updateLocationStatus('error', errorMessage);
+            
+            // Show permission modal if permission was denied
+            if (error.code === error.PERMISSION_DENIED) {
+                locationPermissionModal.classList.add('active');
+            } else {
+                // Try IP-based location as fallback
+                useIPBasedLocation();
+            }
+        }
+
+        function useIPBasedLocation() {
+            updateLocationStatus('detecting', 'Getting approximate location from IP...');
+            
+            // Try multiple IP geolocation services for better reliability
+            const ipServices = [
+                'https://ipapi.co/json/',
+                'https://ipinfo.io/json',
+                'https://api.ipgeolocation.io/ipgeo?apiKey=demo'
+            ];
+            
+            let currentServiceIndex = 0;
+            
+            function tryNextService() {
+                if (currentServiceIndex >= ipServices.length) {
+                    // All services failed, use default location
+                    useDefaultLocation();
+                    return;
+                }
+                
+                const serviceUrl = ipServices[currentServiceIndex];
+                currentServiceIndex++;
+                
+                fetch(serviceUrl)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(data => {
+                        let lat, lng;
+                        
+                        // Parse response based on service
+                        if (serviceUrl.includes('ipapi.co')) {
+                            lat = data.latitude;
+                            lng = data.longitude;
+                        } else if (serviceUrl.includes('ipinfo.io')) {
+                            const coords = data.loc ? data.loc.split(',') : null;
+                            if (coords) {
+                                lat = parseFloat(coords[0]);
+                                lng = parseFloat(coords[1]);
+                            }
+                        } else if (serviceUrl.includes('ipgeolocation.io')) {
+                            lat = data.latitude;
+                            lng = data.longitude;
+                        }
+                        
+                        if (lat && lng) {
+                            appState.userLocation = {
+                                latitude: lat,
+                                longitude: lng,
+                                accuracy: 50000, // ~50km accuracy for IP-based location
+                                source: 'ip'
+                            };
+                            
+                            const locationText = `Approximate Location: ${appState.userLocation.latitude.toFixed(4)}, ${appState.userLocation.longitude.toFixed(4)}`;
+                            updateLocationStatus('success', `${locationText} (IP-based, city-level accuracy)`);
+                            
+                            // Update hospitals list if on hospitals page
+                            if (appState.currentPage === 'hospitals-page') {
+                                displayHospitals();
+                            }
+                        } else {
+                            throw new Error('Invalid location data');
+                        }
+                    })
+                    .catch(error => {
+                        console.error(`IP location service ${serviceUrl} failed:`, error);
+                        tryNextService();
+                    });
+            }
+            
+            // Start trying services
+            tryNextService();
+        }
+
+        function useDefaultLocation() {
+            // Use a default location for demo purposes (Kakinada, India)
+            appState.userLocation = {
+                latitude: 16.9604,
+                longitude: 82.2381,
+                accuracy: 10000, // ~10km accuracy
+                source: 'default'
+            };
+            
+            const locationText = `Demo Location: ${appState.userLocation.latitude.toFixed(4)}, ${appState.userLocation.longitude.toFixed(4)}`;
+            updateLocationStatus('success', `${locationText} (Demo Mode - Kakinada, India)`);
+            
+            // Update hospitals list if on hospitals page
+            if (appState.currentPage === 'hospitals-page') {
+                displayHospitals();
+            }
+        }
+
+        function updateLocationStatus(status, message = '') {
+            const statusIcons = {
+                detecting: '<i class="fas fa-spinner fa-spin"></i>',
+                success: '<i class="fas fa-check-circle"></i>',
+                error: '<i class="fas fa-exclamation-triangle"></i>'
+            };
+            
+            const statusTexts = {
+                detecting: 'Detecting your location...',
+                success: message,
+                error: message
+            };
+            
+            // Update all location status indicators
+            if (homeLocationStatus) {
+                homeLocationStatus.innerHTML = `${statusIcons[status]} ${statusTexts[status]}`;
+            }
+            if (toolLocationStatus) {
+                toolLocationStatus.innerHTML = `${statusIcons[status]} ${statusTexts[status]}`;
+            }
+            if (hospitalsLocationStatus) {
+                hospitalsLocationStatus.innerHTML = `${statusIcons[status]} ${statusTexts[status]}`;
             }
         }
 
@@ -3280,17 +3542,11 @@
             }, 3000);
         }
 
-        function showEmergencyAlert() {
-            // For manual emergency button click
-            const condition = "Unknown Medical Emergency";
-            triggerEmergencyAlert(condition);
-        }
-
         function closeEmergencyAlert() {
             emergencyModal.classList.remove('active');
         }
 
-        // NEW: Direct emergency call function
+        // Direct emergency call function
         function directEmergencyCall() {
             // Close any open emergency modal
             closeEmergencyAlert();
